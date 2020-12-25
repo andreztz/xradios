@@ -20,18 +20,12 @@ class MetadataState:
 
 class LoadMetadata(metaclass=ABCMeta):
 
-    station = None
-
     @abstractmethod
     def metadata(self, station):
         pass
 
-    def get(self):
-        return self.metadata(self.station)
-
     def __call__(self, station):
-        self.station = station
-        return self.get()
+        return self.metadata(station)
 
 
 class LoadMetadataFromPlugin(LoadMetadata):
