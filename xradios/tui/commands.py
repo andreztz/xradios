@@ -47,10 +47,14 @@ def listview_handler(event):
 
 
 def prompt_handler(event):
-    variables = COMMAND_GRAMMAR.match(event.current_buffer.text).variables()
-    command = variables.get("command")
-    if has_command_handler(command):
-        call_command_handler(command, event, variables=variables)
+    try:
+        variables = COMMAND_GRAMMAR.match(event.current_buffer.text).variables()
+    except Exception:
+        return
+    else:
+        command = variables.get("command")
+        if has_command_handler(command):
+            call_command_handler(command, event, variables=variables)
 
 
 def cmd(name):
