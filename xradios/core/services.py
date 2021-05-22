@@ -1,16 +1,15 @@
 import logging
 
-from pyradios import RadioBrowser
 from notify import notification
-
-from xradios.messages import emitter
+from pyradios import RadioBrowser
+from xradios.core.metadata import MetadataManager
 from xradios.core.player import Player
-from xradios.core.metadata import Metadata
+from xradios.messages import emitter
 
 
 log = logging.getLogger(__name__)
 
-metadata = Metadata()
+metadata = MetadataManager()
 player = Player()
 rb = RadioBrowser()
 

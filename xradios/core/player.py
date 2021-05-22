@@ -9,21 +9,13 @@ log = logging.getLogger(__name__)
 
 
 class Player:
-    player = MPV(
-        video=False,
-        ytdl=False,
-        input_default_bindings=True,
-        input_vo_keyboard=True,
-    )
-    player.fullscreen = False
-    player.loop_playlist = "inf"
-    player["vo"] = "gpu"
+    player = MPV()
+    # player.loop_playlist = "inf"
     player.set_loglevel = "no"
 
     def play(self, station):
         url = self._click_counter(station.stationuuid)
         self.player.play(url)
-        # self.player.wait_for_playback() # Block
 
     def stop(self):
         self.player.play("")
@@ -41,6 +33,6 @@ class Player:
         try:
             station = rb.click_counter(stationuuid)
         except Exception:
-            log.exception("Playable Station Error:")
+            log.exception("click counter error:")
         else:
             return station["url"]

@@ -15,10 +15,6 @@ class DisplayBuffer(Buffer):
             document=Document(content, 0), read_only=True, name=DISPLAY_BUFFER
         )
 
-    def update(self, metadata):
-        content = self.format_display(metadata)
-        self.set_document(Document(content, 0), bypass_readonly=True)
-
     def clear(self):
         self.set_document(Document("", 0), bypass_readonly=True)
 
@@ -35,12 +31,16 @@ class DisplayBuffer(Buffer):
         while True:
             emitter.emit("METADATA_GET")
             metadata = emitter.emit("METADATA_STATE")
-            if metadata.play_now and metadata.name:
+            if metadata and metadata.play_now and metadata.name:
                 emitter.emit("NOTIFICATION", metadata.play_now, metadata.name)
             log.info(metadata)
             self.update(metadata)
 
-            await asyncio.sleep(120)
+            await asyncio.sleep(12)
+
+    def update(self, metadata):
+        content = self.format_display(metadata)
+        self.set_document(Document(content, 0), bypass_readonly=True)
 
 
 buffer = DisplayBuffer()

@@ -15,7 +15,7 @@ def main():
         search_term = cli.stations_by_tag
     else:
         query = getattr(rb, "stations_by_tag")
-        search_term = "bbc"
+        search_term = "trance"
 
     tui = TUI()
     tui.initialize(query=query, search_term=search_term)

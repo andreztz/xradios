@@ -1,13 +1,31 @@
-from abc import ABCMeta
-from abc import abstractmethod
-import importlib
 import logging
+import os
 import re
+from functools import partial
+from pathlib import Path
 
+from pluginbase import PluginBase
 from streamscrobbler import streamscrobbler
 
 
 log = logging.getLogger(__name__)
+
+here = os.path.abspath(os.path.dirname(__file__))
+get_path = partial(os.path.join, here)
+plugin_base = PluginBase(package="xradios.plugins")
+
+plugin_source = plugin_base.make_plugin_source(
+    searchpath=[get_path("../plugins")]
+)
+
+
+def normalize_plugin_name(name):
+    name = re.sub(r"(\s|\-|\.|,|\"|\'|\`)+", "_", name)
+    return name.lower()
+
+
+def plugin_name(name):
+    return "plug_{}".format(normalize_plugin_name(name))
 
 
 class MetadataState:
@@ -17,86 +35,41 @@ class MetadataState:
         self.play_now = ""
         self.homepage = ""
 
-
-class LoadMetadata(metaclass=ABCMeta):
-
-    @abstractmethod
-    def metadata(self, station):
-        pass
-
-    def __call__(self, station):
-        return self.metadata(station)
+    def __repr__(self):
+        return "MetadataState([{}, {}, {}])".format(
+            self.name, self.play_now, self.homepage
+        )
 
 
-class LoadMetadataFromPlugin(LoadMetadata):
-    """
-    Try to get metadata and music played from the plugin.
-    """
-    def _normalize_plugin_name(self, name):
-        name = re.sub(r"(\s|\-|\.|,|\"|\'|\`)+", "_", name)
-        return name.lower()
-
-    def _plugin_name(self, name):
-        return "plug_{}".format(self._normalize_plugin_name(name))
-
-    def metadata(self, station):
-
-        try:
-            plugin = importlib.import_module(
-                "xradios.plugins." + self._plugin_name(station.name)
-            )
-        except ImportError:
-            log.exception("Plugin not Found")
-            return None, None
-        else:
-            service, artist, title = plugin.run()
-            log.info(f"{service} {artist} {title}")
-            if not all([service, artist, title]):
-                return
-            song = "{} - {}".format(artist, title)
-        return song, service
-
-
-class LoadMetadataFromStream(LoadMetadata):
-    """
-    Try to get metadata and music played in a stream from the streamscrobbler.
-    """
-    def metadata(self, station):
-        data = streamscrobbler.get_server_info(station.url)
-        metadata = data["metadata"]
-        if not metadata:
-            return
-        log.info(metadata)
-        return metadata.get("song")
-
-
-class Metadata:
+class MetadataManager:
     def __init__(self):
         self.station = None
-        self.context = MetadataState()
-        self.metadata_from_plugin = LoadMetadataFromPlugin()
-        self.metadata_from_stream = LoadMetadataFromStream()
+        self.s = MetadataState()
 
     def get(self):
         """
-        Try to get metadata and music played from the plugin or stream.
+        Try to find the id of the song that is playing.
         """
-        try:
-            song, service = self.metadata_from_plugin(self.station)
-        except Exception:
-            log.exception("plugin error: ")
+        song = None
+        name = plugin_name(self.station.name)
+
+        if name in plugin_source.list_plugins():
+            # Try to get the id of song with user plugin.
+            plugin = plugin_source.load_plugin(name)
+            song = plugin.run()
         else:
-            if song and service:
-                self.context.play_now = song
-            else:
-                song = self.metadata_from_stream(self.station)
-                self.context.play_now = song
+            # Try to get the id of song with streamscrobler plugin.
+            plugin = plugin_source.load_plugin("stream")
+            song = plugin.run(station.url)
+
+        if song:
+            self.s.play_now = song
 
     def state(self):
-        return self.context
+        return self.s
 
     def __call__(self, station):
         self.station = station
-        self.context.id = self.station.id
-        self.context.homepage = self.station.homepage
-        self.context.name = self.station.name
+        self.s.id = self.station.id
+        self.s.homepage = self.station.homepage
+        self.s.name = self.station.name
