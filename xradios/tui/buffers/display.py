@@ -29,14 +29,20 @@ class DisplayBuffer(Buffer):
 
     async def run(self):
         while True:
-            emitter.emit("METADATA_GET")
+            try:
+
+                emitter.emit("METADATA_GET")
+            except:
+                pass
+
             metadata = emitter.emit("METADATA_STATE")
+
             if metadata and metadata.play_now and metadata.name:
                 emitter.emit("NOTIFICATION", metadata.play_now, metadata.name)
             log.info(metadata)
             self.update(metadata)
 
-            await asyncio.sleep(12)
+            await asyncio.sleep(120)
 
     def update(self, metadata):
         content = self.format_display(metadata)

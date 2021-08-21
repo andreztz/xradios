@@ -10,7 +10,7 @@ class ListViewBuffer(Buffer):
         content = kwargs.get("content", "")
         super().__init__(
             document=Document(content, 0),
-            multiline=True,
+            multiline=False,
             read_only=True,
             name=LISTVIEW_BUFFER,
         )

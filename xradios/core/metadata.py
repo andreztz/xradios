@@ -60,7 +60,7 @@ class MetadataManager:
         else:
             # Try to get the id of song with streamscrobler plugin.
             plugin = plugin_source.load_plugin("stream")
-            song = plugin.run(station.url)
+            song = plugin.run(self.station.url)
 
         if song:
             self.s.play_now = song

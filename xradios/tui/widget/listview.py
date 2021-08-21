@@ -23,22 +23,22 @@ class ListView:
             content=self.buffer_control,
             right_margins=[ScrollbarMargin(display_arrows=True)],
         )
-        self.window = Frame(
-            body=Box(
-                self.window,
-                padding_left=2,
-                padding_right=2,
-                padding_top=0,
-                padding_bottom=0,
-            )
-        )
-        # self.window = Frame(self.window)
+        # self.window = Frame(
+        #     body=Box(
+        #         self.window,
+        #         padding_left=2,
+        #         padding_right=2,
+        #         padding_top=0,
+        #         padding_bottom=0,
+        #     )
+        # )
+        self.window = Frame(self.window)
 
     def handler(self, event):
         return listview_handler(event)
 
     def _get_key_bindings(self):
-        " Key bindings for the List. "
+        "Key bindings for the List."
         kb = KeyBindings()
 
         @kb.add("p")
