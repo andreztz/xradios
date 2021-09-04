@@ -3,7 +3,7 @@
 > Listen to your favorite internet radio stations with xradios.
 
 
-[![xradios example video]()](https://github.com/andreztz/xradios/issues/2#issue-988180396)
+[![See the demo video]()](https://github.com/andreztz/xradios/issues/2#issue-988180396)
 
 ## Installation
 
