@@ -2,9 +2,6 @@
 
 > Listen to your favorite internet radio stations with xradios.
 
-
-[![See the demo video]()](https://github.com/andreztz/xradios/issues/2#issue-988180396)
-
 <https://user-images.githubusercontent.com/7193527/132077711-e961bdf7-e756-4516-9f9d-62ecbe147fd5.mp4>
 
 ## Installation
