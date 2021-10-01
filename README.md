@@ -2,7 +2,7 @@
 
 > Listen to your favorite internet radio stations with xradios.
 
-<https://user-images.githubusercontent.com/7193527/132077711-e961bdf7-e756-4516-9f9d-62ecbe147fd5.mp4>
+<https://user-images.githubusercontent.com/7193527/135573955-3fc16e14-518b-4357-aff2-bac3115335fb.mp4>
 
 ## Installation
 
