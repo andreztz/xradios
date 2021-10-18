@@ -18,11 +18,11 @@ from pluginbase import PluginBase
 from pyradios import RadioBrowser
 
 
-from xradios.core.player import Player
+from xradios.core.player import player
 from xradios.logger import log
 
+
 rb = RadioBrowser()
-player = Player()
 
 
 command_handlers = {}

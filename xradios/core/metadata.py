@@ -23,9 +23,6 @@ plugin_source = plugin_base.make_plugin_source(
 )
 
 
-class Error(Exception):
-    pass
-
 
 def normalize_plugin_name(name):
     name = re.sub(r"(\s|\-|\.|,|\"|\'|\`)+", "_", name)

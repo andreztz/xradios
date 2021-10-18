@@ -16,7 +16,7 @@ $ pip install xradios
 
 ```bash
 
-$ xradiosd && xradios
+    $ xradiosd && xradios
 
 ```
 

@@ -1,5 +1,7 @@
 import logging
 
+from abc import ABC
+from abc import abstractmethod
 from mpv import MPV
 from pyradios import RadioBrowser
 
@@ -8,7 +10,26 @@ rb = RadioBrowser()
 log = logging.getLogger(__name__)
 
 
-class Player:
+class PlayerBase(ABC):
+    @abstractmethod
+    def play(self):
+        pass
+
+    @abstractmethod
+    def stop(self):
+        pass
+
+    def _click_counter(self, stationuuid):
+        try:
+            station = rb.click_counter(stationuuid)
+        except Exception:
+            log.exception("click counter error:")
+        else:
+            return station["url"]
+
+
+class MPVPlayer(PlayerBase):
+
     player = MPV()
     # player.loop_playlist = "inf"
     player.set_loglevel = "no"
@@ -29,13 +50,21 @@ class Player:
     def terminate(self):
         self.player.terminate()
 
-    def _click_counter(self, stationuuid):
-        try:
-            station = rb.click_counter(stationuuid)
-        except Exception:
-            log.exception("click counter error:")
-        else:
-            return station["url"]
+
+class VLCPlayer(PlayerBase):
+    import vlc
+    instance = vlc.Instance("--input-repeat=-1") # --verbose 0
+    player = instance.media_player_new()
+
+    def play(self, stationuuid):
+        url = self._click_counter(stationuuid)
+        media = self.instance.media_new(url)
+        self.player.set_media(media)
+        self.player.play()
+
+    def stop(self):
+        self.player.stop()
 
 
-player = Player()
+# player = MPVPlayer()
+player = VLCPlayer()
