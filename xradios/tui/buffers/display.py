@@ -43,10 +43,9 @@ class DisplayBuffer(Buffer):
                     # )
                 log.info(metadata)
                 self.update(metadata)
-            await asyncio.sleep(20)
+            await asyncio.sleep(120)
 
     def update(self, metadata):
-        log.info('Atualizando metadados.....')
         content = self.format_display(metadata)
         self.set_document(Document(content, 0), bypass_readonly=True)
 
