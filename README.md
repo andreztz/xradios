@@ -15,7 +15,9 @@ $ pip install xradios
 ## Usage example
 
 ```bash
-$ xradios
+
+$ xradiosd && xradios
+
 ```
 
 ## Development setup
