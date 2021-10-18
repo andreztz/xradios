@@ -1,6 +1,6 @@
 DISPLAY_BUFFER = "display_buffer"
 LISTVIEW_BUFFER = "listview_buffer"
-PROMPT_BUFFER = "prompt_buffer"
+COMMAND_LINE_BUFFER = "command_line_buffer"
 POPUP_BUFFER = "popup_buffer"
 
 # https://stackoverflow.com/questions/21503865/how-to-denote-that-a-command-line-argument-is-optional-when-printing-usage
@@ -44,4 +44,3 @@ Help commands
 help
 help <command> # TODO
 """
-

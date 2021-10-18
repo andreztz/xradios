@@ -5,8 +5,11 @@ from xradios.tui.constants import LISTVIEW_BUFFER
 from xradios.tui.constants import POPUP_BUFFER
 from xradios.tui.constants import HELP_TEXT
 
-from xradios.messages import emitter
+
+from xradios.tui.messages import emitter
+from xradios.tui.client import proxy
 from xradios.tui.utils import stations
+
 
 import logging
 
@@ -46,9 +49,11 @@ def listview_handler(event):
     call_command_handler("play", event)
 
 
-def prompt_handler(event):
+def command_line_handler(event):
     try:
-        variables = COMMAND_GRAMMAR.match(event.current_buffer.text).variables()
+        variables = COMMAND_GRAMMAR.match(
+            event.current_buffer.text
+        ).variables()
     except Exception:
         return
     else:
@@ -77,18 +82,14 @@ def exit(event, **kwargs):
 
 @cmd("play")
 def play(event, **kwargs):
-    call_command_handler("stop", event)
     list_buffer = event.app.layout.get_buffer_by_name(LISTVIEW_BUFFER)
     index = list_buffer.get_index(**kwargs)
     station = stations[int(index)]
-
-    emitter.emit("RADIO_PLAY", station)
-    emitter.emit("METADATA_INIT", station)
-
+    proxy.play(stationuuid=station.stationuuid)
+    emitter.emit("INIT_RADIO_STATION_INFO", station=station.serialize())
     display_buffer = event.app.layout.get_buffer_by_name(DISPLAY_BUFFER)
-
-    emitter.emit("METADATA_GET")
-    metadata = emitter.emit("METADATA_STATE")
+    # emitter.emit("")
+    metadata = emitter.emit("GET_RADIO_STATION_INFO")
     display_buffer.update(metadata)
 
 
@@ -96,27 +97,28 @@ def play(event, **kwargs):
 def stop(event, **kwargs):
     display_buffer = event.app.layout.get_buffer_by_name(DISPLAY_BUFFER)
     display_buffer.clear()
-    emitter.emit("RADIO_STOP")
+    proxy.stop()
 
 
 @cmd("pause")
 def pause(event, **kwargs):
-    emitter.emit("RADIO_PAUSE")
+    proxy.pause()
 
 
 @cmd("list")
 def list(event, **kwargs):
     list_buffer = event.app.layout.get_buffer_by_name(LISTVIEW_BUFFER)
-    subcommand = kwargs["variables"].get("subcommand")
-    term = kwargs["variables"].get("term")
-    resp = emitter.emit("RADIO_SEARCH", command=subcommand, term=term)
-    stations.new(*resp)
+    query = {}
+    query["command"] = kwargs["variables"].get("subcommand")
+    query["term"] = kwargs["variables"].get("term")
+    response = proxy.remote_search(**query)
+    stations.new(*response)
     list_buffer.update(str(stations))
 
 
 @cmd("help")
 def help(event, **kwargs):
-    """Show help """
+    """Show help"""
     popup_buffer = event.app.layout.get_buffer_by_name(POPUP_BUFFER)
     popup_buffer.update(HELP_TEXT)
     event.app.layout.focus(popup_buffer)

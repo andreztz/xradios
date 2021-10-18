@@ -1,15 +1,26 @@
+from dataclasses import asdict
+from dataclasses import dataclass
+from dataclasses import field
+from collections import UserList
+
+
+@dataclass(frozen=True)
 class Station:
-    def __init__(self, **kwargs):
-        for key, value in kwargs.items():
-            setattr(self, key, value)
+    index: str
+    stationuuid: str
+    name: str
+    url: str
+    homepage: str
+    tags: str
+
+
+    def serialize(self):
+        return asdict(self)
 
     def __str__(self):
         return "{:>4} | {:<30} | tags: {} \n".format(
-            self.id, self.name[0:30], self.tags
+            self.index, self.name[0:30], self.tags
         )
-
-    def __repr__(self):
-        return "<Station(name={})>".format(self.name)
 
 
 class StationList:
@@ -17,14 +28,20 @@ class StationList:
         self.new(*args)
 
     def new(self, *args):
-        if args:
-            self._list = []
-            for index, obj in enumerate(args, 1):
-                o = Station(**obj)
-                o.id = index
-                self._list.append(o)
-        else:
-            self._list = []
+        if not args:
+            return
+
+        self._list = []
+        for index, obj in enumerate(args, 1):
+            o = Station(
+                index=index,
+                stationuuid=obj["stationuuid"],
+                name=obj["name"],
+                url=obj["url"],
+                homepage=obj["homepage"],
+                tags=obj["tags"],
+            )
+            self._list.append(o)
 
     def __getitem__(self, index):
         return self._list[index]

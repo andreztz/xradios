@@ -13,8 +13,8 @@ class Player:
     # player.loop_playlist = "inf"
     player.set_loglevel = "no"
 
-    def play(self, station):
-        url = self._click_counter(station.stationuuid)
+    def play(self, stationuuid):
+        url = self._click_counter(stationuuid)
         self.player.play(url)
 
     def stop(self):
@@ -36,3 +36,6 @@ class Player:
             log.exception("click counter error:")
         else:
             return station["url"]
+
+
+player = Player()

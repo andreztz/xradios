@@ -1,22 +1,30 @@
 import logging
 import os
 import re
+
+from dataclasses import asdict
+from dataclasses import dataclass
+from dataclasses import field
+
 from functools import partial
-from pathlib import Path
+
 
 from pluginbase import PluginBase
-from streamscrobbler import streamscrobbler
 
 
 log = logging.getLogger(__name__)
-
 here = os.path.abspath(os.path.dirname(__file__))
-get_path = partial(os.path.join, here)
-plugin_base = PluginBase(package="xradios.plugins")
 
+get_path = partial(os.path.join, here)
+
+plugin_base = PluginBase(package="xradios.plugins")
 plugin_source = plugin_base.make_plugin_source(
     searchpath=[get_path("../plugins")]
 )
+
+
+class Error(Exception):
+    pass
 
 
 def normalize_plugin_name(name):
@@ -28,17 +36,15 @@ def plugin_name(name):
     return "plug_{}".format(normalize_plugin_name(name))
 
 
+@dataclass
 class MetadataState:
-    def __init__(self):
-        self.id = ""
-        self.name = ""
-        self.play_now = ""
-        self.homepage = ""
+    index: str = field(init=False, default="")
+    name: str = field(init=False, default="")
+    play_now: str = field(init=False, default="")
+    homepage: str = field(init=False, default="")
 
-    def __repr__(self):
-        return "MetadataState([{}, {}, {}])".format(
-            self.name, self.play_now, self.homepage
-        )
+    def serialize(self):
+        return asdict(self)
 
 
 class MetadataManager:
@@ -51,7 +57,7 @@ class MetadataManager:
         Try to find the id of the song that is playing.
         """
         song = None
-        name = plugin_name(self.station.name)
+        name = plugin_name(self.station["name"])
 
         if name in plugin_source.list_plugins():
             # Try to get the id of song with user plugin.
@@ -60,16 +66,20 @@ class MetadataManager:
         else:
             # Try to get the id of song with streamscrobler plugin.
             plugin = plugin_source.load_plugin("stream")
-            song = plugin.run(self.station.url)
+            song = plugin.run(self.station["url"])
 
         if song:
             self.s.play_now = song
 
     def state(self):
-        return self.s
+        return self.s.serialize()
 
     def __call__(self, station):
-        self.station = station
-        self.s.id = self.station.id
-        self.s.homepage = self.station.homepage
-        self.s.name = self.station.name
+        if station:
+            self.station = station
+            self.s.index = station["index"]
+            self.s.homepage = station["homepage"]
+            self.s.name = station["name"]
+
+
+metadata_manager = MetadataManager()

@@ -9,13 +9,14 @@ from prompt_toolkit.filters import has_focus
 from xradios.tui.widget.display import Display
 from xradios.tui.widget.popup import PopupWindow
 from xradios.tui.widget.listview import ListView
-from xradios.tui.widget.prompt import Prompt
+from xradios.tui.widget.command_line import CommandLine
 from xradios.tui.widget.topbar import TopBar
 
 from xradios.tui.buffers.display import buffer as display_buffer
 from xradios.tui.buffers.popup import buffer as popup_buffer
-from xradios.tui.buffers.prompt import buffer as prompt_buffer
+from xradios.tui.buffers.command_line import buffer as command_line_buffer
 from xradios.tui.buffers.listview import buffer as listview_buffer
+
 
 
 layout = Layout(
@@ -25,7 +26,7 @@ layout = Layout(
                 TopBar(message="Need help! Press `F1`."),
                 Display(display_buffer),
                 ListView(listview_buffer),
-                Prompt(prompt_buffer),
+                CommandLine(command_line_buffer),
             ]
         ),
         modal=True,
@@ -37,15 +38,14 @@ layout = Layout(
                 left=2,
                 right=2,
                 content=ConditionalContainer(
-                    content=PopupWindow(
-                        popup_buffer, title="Help"
-                    ),
+                    content=PopupWindow(popup_buffer, title="Help"),
                     filter=has_focus(popup_buffer),
                 ),
+
             )
         ],
     )
 )
 
 
-layout.focus(prompt_buffer)
+layout.focus(command_line_buffer)

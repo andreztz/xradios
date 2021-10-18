@@ -2,7 +2,7 @@ from prompt_toolkit.buffer import Buffer
 from prompt_toolkit.document import Document
 from prompt_toolkit.completion import WordCompleter
 
-from xradios.tui.constants import PROMPT_BUFFER
+from xradios.tui.constants import COMMAND_LINE_BUFFER
 
 
 COMMANDS = [
@@ -30,13 +30,13 @@ COMMANDS = [
 completer = WordCompleter(COMMANDS, ignore_case=True)
 
 
-class PromptBuffer(Buffer):
+class CommandLineBuffer(Buffer):
     def __init__(self, *args, **kwargs):
         super().__init__(
             completer=completer,
             complete_while_typing=True,
-            name=PROMPT_BUFFER
+            name=COMMAND_LINE_BUFFER
         )
 
 
-buffer = PromptBuffer()
+buffer = CommandLineBuffer()
