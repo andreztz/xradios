@@ -14,7 +14,7 @@ $ pip install xradios
 
 ## Usage example
 
-Open the terminal, and run the command
+Open the terminal, and run the following command
 
 ```bash
 
@@ -22,7 +22,7 @@ $ xradiosd
 
 ```
 
-Open another terminal, and run the command
+Open another terminal, and run the following command
 
 ```
 $ xradios
