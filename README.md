@@ -14,11 +14,21 @@ $ pip install xradios
 
 ## Usage example
 
+Open the terminal, and run the command
+
 ```bash
 
-    $ xradiosd && xradios
+$ xradiosd
 
 ```
+
+Open another terminal, and run the command
+
+```
+$ xradios
+```
+
+
 
 ## Development setup
 
