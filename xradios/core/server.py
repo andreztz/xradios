@@ -109,19 +109,25 @@ class RPCServer:
     def serve_forever(self):
         self._serv.serve_forever()
 
+    def stop(self):
+        self._serv.shutdown()
 
-def sigterm_handler(signo, frame):
+
+def sigterm_handler(signo, frame, server):
+    server.stop()
+    log.info('Shutdown server...')
     raise SystemExit(1)
 
 
 def run(host="", port=10000):
     server = RPCServer((host, port))
+    signal(SIGTERM, lambda signo, frame: sigterm_handler(signo, frame, server))
     log.info(f"Serving XML-RPC port: {port}")
     server.serve_forever()
 
 
 def main():
-    signal(SIGTERM, sigterm_handler)
+    import sys
 
     try:
         run()

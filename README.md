@@ -6,8 +6,6 @@
 
 ## Installation
 
-Linux and Windows:
-
 ```bash
 $ pip install xradios
 ```
@@ -18,16 +16,9 @@ Open the terminal, and run the following command
 
 ```bash
 
-$ xradiosd
-
-```
-
-Open another terminal, and run the following command
-
-```
 $ xradios
-```
 
+```
 
 
 ## Development setup
