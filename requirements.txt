@@ -6,3 +6,4 @@ python-mpv>=0.5.2
 pyradios>=0.0.22
 pluginbase>=1.0.1
 python-vlc>=3.0.12118
+psutil>=5.8.0
