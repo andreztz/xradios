@@ -38,8 +38,12 @@ def main():
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL
     )
-
-    time.sleep(5)
+    # wait until the server is ready
+    while True:
+        if not process_is_running(server):
+            continue
+        else:
+            break
 
     if cli.stations_by_tag:
         query['command'] = "bytag"
