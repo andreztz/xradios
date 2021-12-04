@@ -7,7 +7,7 @@ from dataclasses import field
 
 from functools import partial
 
-from signal import signal
+import signal
 from signal import SIGTERM
 
 from xmlrpc.server import SimpleXMLRPCServer
@@ -121,7 +121,11 @@ def sigterm_handler(signo, frame, server):
 
 def run(host="", port=10000):
     server = RPCServer((host, port))
-    signal(SIGTERM, lambda signo, frame: sigterm_handler(signo, frame, server))
+    signal.signal(
+        signal.SIGTERM,
+        lambda signo, frame: sigterm_handler(signo, frame, server)
+    )
+
     log.info(f"Serving XML-RPC port: {port}")
     server.serve_forever()
 
