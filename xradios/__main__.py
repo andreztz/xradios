@@ -33,17 +33,14 @@ def main():
 
     server = "xradiosd"
 
-    subprocess.Popen(
+    proc = subprocess.Popen(
         [server],
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL
     )
     # wait until the server is ready
-    while True:
-        if not process_is_running(server):
-            continue
-        else:
-            break
+    time.sleep(1)
+
 
     if cli.stations_by_tag:
         query['command'] = "bytag"
