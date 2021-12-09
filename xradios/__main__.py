@@ -40,5 +40,5 @@ def main():
     initialize_services()
     tui.run()
     
-    proc.kill()
+    proc.terminate()
     proc.wait(timeout=1)
