@@ -24,14 +24,14 @@ def main():
     else:
         query['command'] = "bytag"
         query["term"] = "trance"
-
+    
     proc = subprocess.Popen(
         [server],
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL
     )
     # wait until the server is ready
-    time.sleep(1)
+    time.sleep(2)
 
     response = proxy.remote_search(**query)
 
@@ -41,4 +41,4 @@ def main():
     tui.run()
     
     proc.terminate()
-    proc.wait(timeout=1)
+    proc.wait(timeout=2)
