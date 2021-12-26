@@ -25,10 +25,8 @@ class DisplayBuffer(Buffer):
     def format_display(self, m):
         m = type('M', (object, ), m)
         if m.play_now:
-            return (
-                f"\n{m.index:>4} | {m.name:<30} {m.homepage}\n\n   {m.play_now}"
-            )
-        return f"\n{m.index} | {m.name}\n\nWebsite: {m.homepage}\n"
+            return f"\n{m.name:<30} {m.homepage}\n\n{m.play_now}"
+        return f"\n{m.name}\n\nWebsite: {m.homepage}\n"
 
     async def run(self):
         while True:
