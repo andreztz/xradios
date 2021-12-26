@@ -30,8 +30,6 @@ def main():
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL
     )
-    # wait until the server is ready
-    time.sleep(2)
 
     response = proxy.remote_search(**query)
 
