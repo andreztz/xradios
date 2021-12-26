@@ -2,7 +2,7 @@
 
 [![Upload Python Package](https://github.com/andreztz/xradios/actions/workflows/python-publish.yml/badge.svg)](https://github.com/andreztz/xradios/actions/workflows/python-publish.yml)
 
-> Listen to your favorite internet radio stations with xradios.
+> Search and play your favorite Internet radio station with xradios.
 
 <https://user-images.githubusercontent.com/7193527/144721555-fc18e17c-38a6-42f2-ad4e-df40542e24f2.mp4>
 
