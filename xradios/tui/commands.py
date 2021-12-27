@@ -5,12 +5,8 @@ from xradios.tui.constants import DISPLAY_BUFFER
 from xradios.tui.constants import LISTVIEW_BUFFER
 from xradios.tui.constants import POPUP_BUFFER
 from xradios.tui.constants import HELP_TEXT
-
-
-from xradios.tui.messages import emitter
 from xradios.tui.client import proxy
 from xradios.tui.utils import stations
-
 
 import logging
 
@@ -73,7 +69,7 @@ def cmd(name):
 @cmd("exit")
 def exit(event, **kwargs):
     """ exit Ctrl + Q"""
-    emitter.emit("KILLALL")
+    proxy.stop()
     event.app.exit()
 
 
@@ -83,10 +79,9 @@ def play(event, **kwargs):
     index = list_buffer.get_index(**kwargs)
     station = stations[int(index)]
     proxy.play(stationuuid=station.stationuuid)
-    emitter.emit("INIT_RADIO_STATION_INFO", station=station.serialize())
+    proxy.station_info(station=station.serialize())
     display_buffer = event.app.layout.get_buffer_by_name(DISPLAY_BUFFER)
-    # emitter.emit("")
-    metadata = emitter.emit("GET_RADIO_STATION_INFO")
+    metadata = proxy.station_info()
     display_buffer.update(metadata)
 
 

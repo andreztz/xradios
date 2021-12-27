@@ -6,7 +6,7 @@ from prompt_toolkit.document import Document
 
 from xradios.tui.messages import emitter
 from xradios.tui.constants import DISPLAY_BUFFER
-
+from xradios.tui.client import proxy
 import logging
 
 log = logging.getLogger('xradios')
@@ -31,7 +31,7 @@ class DisplayBuffer(Buffer):
     async def run(self):
         while True:
             try:
-                metadata = emitter.emit("GET_RADIO_STATION_INFO")
+                metadata = proxy.station_info()
             except:
                 pass
             else:

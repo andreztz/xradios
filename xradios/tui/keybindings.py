@@ -10,7 +10,6 @@ from prompt_toolkit.filters import has_focus
 from xradios.tui.constants import HELP_TEXT
 from xradios.tui.constants import POPUP_BUFFER
 from xradios.tui.constants import COMMAND_LINE_BUFFER
-from xradios.tui.messages import emitter
 
 
 def kbindings():
@@ -61,7 +60,6 @@ def kbindings():
 
     @kb.add(Keys.ControlDown)
     def _(event):
-        # focus_next(event)
         enter_command_mode(get_app())
 
     @kb.add(Keys.ControlUp)
@@ -76,6 +74,5 @@ def kbindings():
     @kb.add(Keys.ControlQ)
     def _(event):
         event.app.exit()
-        emitter.emit("KILLALL")
 
     return kb

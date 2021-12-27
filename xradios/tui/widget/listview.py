@@ -6,7 +6,6 @@ from prompt_toolkit.widgets import Box
 from prompt_toolkit.widgets import Frame
 from prompt_toolkit.key_binding import KeyBindings
 
-from xradios.tui.messages import emitter
 from xradios.tui.commands import call_command_handler
 
 
