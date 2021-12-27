@@ -6,4 +6,4 @@ def run(url, *args, **kwargs):
     metadata = data["metadata"]
     if not metadata:
         return
-    return metadata.get("song")
+    return metadata.get("song").strip()
