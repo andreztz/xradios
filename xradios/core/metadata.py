@@ -66,7 +66,7 @@ class MetadataManager:
             song = plugin.run(self.station["url"])
 
         if song:
-            self.s.play_now = song
+            self.s.play_now = song.strip()
 
     def state(self):
         return self.s.serialize()
