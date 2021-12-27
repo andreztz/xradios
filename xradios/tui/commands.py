@@ -1,4 +1,5 @@
 from prompt_toolkit.contrib.regular_languages import compile
+from tinydb import TinyDB, Query
 
 from xradios.tui.constants import DISPLAY_BUFFER
 from xradios.tui.constants import LISTVIEW_BUFFER
@@ -14,6 +15,7 @@ from xradios.tui.utils import stations
 import logging
 
 
+db = TinyDB('bookmarks.json')
 log = logging.getLogger(__name__)
 
 
@@ -45,10 +47,6 @@ def call_command_handler(command, *args, **kwargs):
     COMMAND_TO_HANDLER[command](*args, **kwargs)
 
 
-def listview_handler(event):
-    call_command_handler("play", event)
-
-
 def command_line_handler(event):
     try:
         variables = COMMAND_GRAMMAR.match(
@@ -66,7 +64,6 @@ def cmd(name):
     """
     Decorator to register commands in this namespace
     """
-
     def decorator(func):
         COMMAND_TO_HANDLER[name] = func
 
@@ -122,3 +119,42 @@ def help(event, **kwargs):
     popup_buffer = event.app.layout.get_buffer_by_name(POPUP_BUFFER)
     popup_buffer.update(HELP_TEXT)
     event.app.layout.focus(popup_buffer)
+
+
+@cmd('bookmark')
+def bookmark(event, **kwargs):
+    list_view_buffer = event.app.layout.get_buffer_by_name(
+            LISTVIEW_BUFFER
+        )
+    index = list_view_buffer.get_index(**kwargs)
+    station = stations[int(index)].serialize()
+
+    del station['index']
+
+    subcommand = kwargs['variables'].get('subcommand')
+    
+    match subcommand:
+        case 'add':
+            # check if the station has already been added to bookmarks
+            if not db.search(Query().stationuuid == station['stationuuid']):
+                db.insert(station)
+        case 'remove':
+            db.remove(Query().name == station['name'])
+        case _:
+            log.info(f'{subcommand!r} not yet implemented')
+
+    stations.new(*db.all())
+    list_view_buffer.update(str(stations))
+
+@cmd("home")
+@cmd("bookmarks")
+def home(event, **kwargs):
+    """
+    Go to startpage
+    """
+    list_view_buffer = event.app.layout.get_buffer_by_name(LISTVIEW_BUFFER)
+    stations.new(*db.all())
+    list_view_buffer.update(str(stations))
+
+
+

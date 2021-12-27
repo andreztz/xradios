@@ -1,3 +1,4 @@
+from prompt_toolkit.keys import Keys
 from prompt_toolkit.layout import BufferControl
 from prompt_toolkit.layout.containers import Window
 from prompt_toolkit.layout.margins import ScrollbarMargin
@@ -6,7 +7,7 @@ from prompt_toolkit.widgets import Frame
 from prompt_toolkit.key_binding import KeyBindings
 
 from xradios.tui.messages import emitter
-from xradios.tui.commands import listview_handler
+from xradios.tui.commands import call_command_handler
 
 
 class ListView:
@@ -23,19 +24,7 @@ class ListView:
             content=self.buffer_control,
             right_margins=[ScrollbarMargin(display_arrows=True)],
         )
-        # self.window = Frame(
-        #     body=Box(
-        #         self.window,
-        #         padding_left=2,
-        #         padding_right=2,
-        #         padding_top=0,
-        #         padding_bottom=0,
-        #     )
-        # )
         self.window = Frame(self.window)
-
-    def handler(self, event):
-        return listview_handler(event)
 
     def _get_key_bindings(self):
         "Key bindings for the List."
@@ -44,12 +33,23 @@ class ListView:
         @kb.add("p")
         @kb.add("enter")
         def _(event):
-            if self.handler is not None:
-                self.handler(event)
+            call_command_handler('play', event)
 
         @kb.add("s")
         def _(event):
-            emitter.emit("RADIO_STOP")
+            call_command_handler('stop', event)
+
+        @kb.add(Keys.ControlD)
+        def _(event):
+            call_command_handler(
+                'bookmark', event, variables={'subcommand': 'add'}
+            )
+
+        @kb.add(Keys.ControlA)
+        def _(event):
+            call_command_handler(
+                'bookmark', event, variables={'subcommand': 'remove'}
+            )
 
         return kb
 

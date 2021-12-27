@@ -1,15 +1,14 @@
 import subprocess
-import time
 
 from xradios.tui import TUI
 from xradios.cli import parser
-from xradios.tui.services import initialize as initialize_services
 from xradios.tui.client import proxy
 
 from pyradios import RadioBrowser
-
+from tinydb import TinyDB
 
 rb = RadioBrowser()
+db = TinyDB('bookmarks.json')
 
 
 def main():
@@ -31,11 +30,12 @@ def main():
         stderr=subprocess.DEVNULL
     )
 
-    response = proxy.remote_search(**query)
+    # response = proxy.remote_search(**query)
+
+    response = db.all()
 
     tui = TUI()
     tui.initialize(response)
-    initialize_services()
     tui.run()
     
     proc.terminate()
