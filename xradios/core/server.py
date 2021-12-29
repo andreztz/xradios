@@ -1,25 +1,15 @@
-# import logging
-import os
-import re
 import sys
-from dataclasses import dataclass
-from dataclasses import field
-
-from functools import partial
-
 import signal
-from signal import SIGTERM
 
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
 
-# from http.server import BaseHTTPRequestHandler
-from pluginbase import PluginBase
-from pyradios import RadioBrowser
-
-
+from xradios.core.metadata import metadata_manager
 from xradios.core.player import player
 from xradios.logger import log
+
+
+from pyradios import RadioBrowser
 
 
 rb = RadioBrowser()
@@ -61,9 +51,6 @@ def remote_search(**kwargs):
     term = kwargs.get("term")
     result = getattr(rb, "stations_by_{}".format(command[2:]))(term)
     return result
-
-
-from xradios.core.metadata import metadata_manager
 
 
 @cmd("station_info")
@@ -125,14 +112,11 @@ def run(host="", port=10000):
         signal.SIGTERM,
         lambda signo, frame: sigterm_handler(signo, frame, server)
     )
-
     log.info(f"Serving XML-RPC port: {port}")
     server.serve_forever()
 
 
 def main():
-    import sys
-
     try:
         run()
     except KeyboardInterrupt:
