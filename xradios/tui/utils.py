@@ -1,6 +1,5 @@
 from dataclasses import asdict
 from dataclasses import dataclass
-from dataclasses import field
 from collections import UserList
 
 
@@ -13,47 +12,36 @@ class Station:
     homepage: str
     tags: str
 
+    @classmethod
+    def fields(cls):
+        return cls.__annotations__.keys()
 
     def serialize(self):
         return asdict(self)
 
     def __str__(self):
-        return "{:>4} | {:<30} | tags: {} \n".format(
-            self.index, self.name[0:30], self.tags
+        return "{:>4} | {:<40.40} | tags: {} \n".format(
+            self.index, self.name, self.tags
         )
 
 
-class StationList:
-    def __init__(self, *args):
-        self.new(*args)
+class StationList(UserList):
+    def __init__(self, *stations):
+        self.data = []
+        if stations:
+            for i, s in enumerate(stations, 1):
+                kwargs = dict(
+                    filter(
+                        lambda elem: elem[0] in Station.fields(), s.items()
+                    )
+                )
+                self.data.append(Station(index=i, **kwargs))
 
     def new(self, *args):
-        if not args:
-            return
-
-        self._list = []
-        for index, obj in enumerate(args, 1):
-            o = Station(
-                index=index,
-                stationuuid=obj["stationuuid"],
-                name=obj["name"],
-                url=obj["url"],
-                homepage=obj["homepage"],
-                tags=obj["tags"],
-            )
-            self._list.append(o)
-
-    def __getitem__(self, index):
-        return self._list[index]
-
-    def __len__(self):
-        return len(self._list)
-
-    def __repr__(self):
-        return "<StationList()>"
+        return self.__init__(*args)
 
     def __str__(self):
-        return "".join(str(s) for s in self)
+        return "".join(str(s) for s in self.data)
 
 
 stations = StationList()
