@@ -1,5 +1,5 @@
 prompt-toolkit>=3.0.8
-notify-send>=0.0.16 
+notify-send>=0.0.20
 Pygments>=2.7.3
 streamscrobbler3>=0.0.4
 python-mpv>=0.5.2
