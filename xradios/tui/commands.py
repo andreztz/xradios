@@ -100,7 +100,11 @@ def pause(event, **kwargs):
 @cmd("search")
 def search(event, **kwargs):
     query = {}
-    query["command"] = kwargs["variables"].get("subcommand")
+    list_buffer = event.app.layout.get_buffer_by_name(LISTVIEW_BUFFER)
+    query["command"] = kwargs["variables"].get("subcommand")[2:] 
+    # TODO:
+    # remover by dos subcomandos
+    # [2: ] remove the by from subcommand
     query["term"] = kwargs["variables"].get("term")
     response = proxy.remote_search(**query)
     stations.new(*response)
