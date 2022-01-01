@@ -40,16 +40,11 @@ def pause():
     player.pause()
 
 
-@cmd("local_search")
-def local_search():
-    log.info("procurando media localmente")
-
-
-@cmd("remote_search")
-def remote_search(**kwargs):
+@cmd("search")
+def search(**kwargs):
     command = kwargs.get("command")
     term = kwargs.get("term")
-    result = getattr(rb, "stations_by_{}".format(command[2:]))(term)
+    result = rb.search(**{command: term})
     return result
 
 
