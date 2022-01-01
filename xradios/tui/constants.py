@@ -7,36 +7,44 @@ POPUP_BUFFER = "popup_buffer"
 HELP_TEXT = """
 
 xradios
----------
-
-Press `Ctrl + Up` or `Ctrl + Down` to move the focus.
-Press `UP` or `Down` to navigate between radio stations
-To exit press `Ctrl + q` or type `exit` in the prompt and press enter.
-To close this window, press F1, ESC, or change the focus.
+-------
 
 
-Command List
-------------
+- Press `:` to show the commandline.
+- Press `Ctrl + Up` or `Ctrl + Down` to move the focus.
+- Press `UP` or `Down` to navigate between radio stations
+- To close xradios press `Ctrl + q` or `:quit` or `:exit`.
+- To close this window, press F1, ESC, or change the focus.
+
 
 Player commands
 ---------------
 
-play <id>
+play <line-number>
 stop
+
 
 Search commands
 ---------------
 
-list bycodec <codec>
-list bycountry <country>
-list byid <id>
-list bylanguage <language>
-list byname <name>
-list bystate <state>
-list bytag <tag>
-list byuuid <uuid>
-list tags
-search <options> # TODO
+search bycodec <codec>
+search bycountry <country>
+search byid <id>
+search bylanguage <language>
+search byname <name>
+search bystate <state>
+search bytag <tag>
+search byuuid <uuid>
+search tags
+
+
+Bookmark commands
+------------------
+
+bookmark add <line-number>
+bookmark rm <line-number>
+bookmarks 
+
 
 Help commands
 --------------

@@ -97,9 +97,8 @@ def pause(event, **kwargs):
     proxy.pause()
 
 
-@cmd("list")
-def list(event, **kwargs):
-    list_buffer = event.app.layout.get_buffer_by_name(LISTVIEW_BUFFER)
+@cmd("search")
+def search(event, **kwargs):
     query = {}
     query["command"] = kwargs["variables"].get("subcommand")
     query["term"] = kwargs["variables"].get("term")
