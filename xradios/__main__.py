@@ -1,10 +1,7 @@
-import time
-import logging
 import subprocess
 
 from xradios.tui import TUI
 from xradios.cli import parser
-from xradios.tui.client import proxy
 
 
 def main():
@@ -21,11 +18,9 @@ def main():
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL
     )
-    time.sleep(2)
-    response = proxy.bookmarks()
-    # response = proxy.search(**query)
+
     tui = TUI()
-    tui.initialize(response)
+    tui.initialize()
     tui.run()
     proc.terminate()
     proc.wait(timeout=2)
