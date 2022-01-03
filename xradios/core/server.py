@@ -49,7 +49,7 @@ log.info(f'Log level {effective_log_level=}')
 
 
 rb = RadioBrowser()
-db = TinyDB(xradios_data_dir / 'bookmarks.json')
+db = TinyDB(xradios_data_dir / 'favorites.json')
 
 
 command_handlers = {}
@@ -97,23 +97,23 @@ def now_playing():
     return metadata_manager.state()
 
 
-@cmd('bookmarks')
-def bookmarks():
+@cmd('favorites')
+def favorites():
     return [dict(s) for s in db.all()]
 
 
-@cmd('add_bookmark')
-def add_bookmark(**station):
-    # Check if the station has already been added to bookmarks
+@cmd('add_favorite')
+def add_favorite(**station):
+    # Check if the station has already been added to favorites
     if not db.search(Query().stationuuid == station['stationuuid']):
         db.insert(station)
-    log.debug(f'Adding a new station to bookmarks {station=}')
+    log.debug(f'Adding a new station to favorites {station=}')
 
 
-@cmd('remove_bookmark')
-def remove_bookmark(**station):
+@cmd('remove_favorite')
+def remove_favorite(**station):
     db.remove(Query().stationuuid == station['stationuuid'])
-    log.debug(f'Removing a station from bookmarks {station=}')
+    log.debug(f'Removing a station from favorites {station=}')
 
 
 class RequestHandler(SimpleXMLRPCRequestHandler):

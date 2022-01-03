@@ -20,22 +20,22 @@ class TUI:
             enable_page_navigation_bindings=True,
         )
         self.loop = get_event_loop()
-        self.bookmarks = None
+        self.favorites = None
 
     def initialize(self):
         list_buffer = self.app.layout.get_buffer_by_name(LISTVIEW_BUFFER)
-        response = self.get_bookmarks()
+        response = self.get_favorites()
         stations.new(*response)
         list_buffer.update(str(stations))
         display_buffer = self.app.layout.get_buffer_by_name(DISPLAY_BUFFER)
 
         self.loop.create_task(display_buffer.run())
 
-    def get_bookmarks(self):
+    def get_favorites(self):
         response = None
         while response is None:
             try:
-                response = proxy.bookmarks()
+                response = proxy.favorites()
             except:
                 import time
                 time.sleep(0.5)

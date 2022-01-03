@@ -38,12 +38,12 @@ search byuuid <uuid>
 search tags
 
 
-Bookmark commands
+Favorites commands
 ------------------
 
-bookmark add <line-number>
-bookmark rm <line-number>
-bookmarks
+favorite add <line-number> 
+favorite rm <line-number>
+favorites
 
 
 Help commands

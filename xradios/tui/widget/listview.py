@@ -42,13 +42,13 @@ class ListView:
         @kb.add(Keys.ControlD)
         def _(event):
             call_command_handler(
-                'bookmark', event, variables={'subcommand': 'add'}
+                'favorite', event, variables={'subcommand': 'add'}
             )
 
         @kb.add(Keys.ControlA)
         def _(event):
             call_command_handler(
-                'bookmark', event, variables={'subcommand': 'remove'}
+                'favorite', event, variables={'subcommand': 'remove'}
             )
 
         return kb

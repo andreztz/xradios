@@ -133,8 +133,8 @@ def help(event, **kwargs):
     event.app.layout.focus(popup_buffer)
 
 
-@cmd('bookmark')
-def bookmark(event, **kwargs):
+@cmd('favorite')
+def favorite(event, **kwargs):
     list_view_buffer = event.app.layout.get_buffer_by_name(
         LISTVIEW_BUFFER
     )
@@ -144,25 +144,25 @@ def bookmark(event, **kwargs):
         case 'add':
             index, station = grabe_from_buffer(list_view_buffer, stations, **kwargs)
             station = station.serialize()
-            # Removes `index` key before storing
+            # Removes `index` key before saving
             del station['index']
-            proxy.add_bookmark(**station)
+            proxy.add_favorite(**station)
         case 'remove':
             index, station = grabe_from_buffer(list_view_buffer, stations, **kwargs)
             station = station.serialize()
-            proxy.remove_bookmark(**station)
+            proxy.remove_favorite(**station)
         case _:
             log.debug(f'{subcommand!r} not yet implemented')
 
-    stations.new(*proxy.bookmarks())
+    stations.new(*proxy.favorites())
     list_view_buffer.update(str(stations))
 
 
-@cmd("bookmarks")
-def home(event, **kwargs):
+@cmd("favorites")
+def favorites(event, **kwargs):
     """
-    Go to bookmarks page
+    Go to favorites page
     """
     list_view_buffer = event.app.layout.get_buffer_by_name(LISTVIEW_BUFFER)
-    stations.new(*proxy.bookmarks())
+    stations.new(*proxy.favorites())
     list_view_buffer.update(str(stations))
