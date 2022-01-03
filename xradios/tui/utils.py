@@ -1,6 +1,7 @@
+from collections import UserList
 from dataclasses import asdict
 from dataclasses import dataclass
-from collections import UserList
+from operator import attrgetter
 
 
 @dataclass(frozen=True)
@@ -75,6 +76,8 @@ class StationList(UserList):
                     )
                 )
                 self.data.append(Station(index=i, **kwargs))
+
+        self.sort(key=attrgetter('name'))
         
     def new(self, *args):
         return self.__init__(*args)
