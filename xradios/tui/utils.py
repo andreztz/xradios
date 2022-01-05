@@ -21,8 +21,8 @@ class Station:
         return asdict(self)
 
     def __str__(self):
-        return "{:>4} | {:<40.40} | tags: {} \n".format(
-            self.index, self.name, self.tags
+        return "| {:<40.40} | tags: {} \n".format(
+            self.name, self.tags
         )
 
 

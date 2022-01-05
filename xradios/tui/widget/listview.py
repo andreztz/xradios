@@ -1,6 +1,7 @@
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.layout import BufferControl
 from prompt_toolkit.layout.containers import Window
+from prompt_toolkit.layout.margins import NumberedMargin
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.widgets import Box
 from prompt_toolkit.widgets import Frame
@@ -22,6 +23,7 @@ class ListView:
         self.window = Window(
             content=self.buffer_control,
             right_margins=[ScrollbarMargin(display_arrows=True)],
+            left_margins=[NumberedMargin()],
         )
         self.window = Frame(self.window)
         self.container = self.window
