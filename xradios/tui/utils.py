@@ -62,7 +62,7 @@ class TagList(UserList):
         return self.__init__(*args)
 
     def __str__(self):
-        return "".join(str(t) for t in self.data)
+        return "".join(str(t) for t in self.data).strip()
 
 
 class StationList(UserList):
@@ -83,7 +83,7 @@ class StationList(UserList):
         return self.__init__(*args)
 
     def __str__(self):
-        return "".join(str(s) for s in self.data)
+        return "".join(str(s) for s in self.data).strip()
 
 
 tags = TagList()
