@@ -32,14 +32,14 @@ class DisplayBuffer(Buffer):
             except:
                 pass
             else:
-                if all(metadata.values()):
+                if metadata and all(metadata.values()):
                     notification(
                         metadata.get('name'),
                         message=metadata.get('song'),
                         app_name='xradios'
                     )
 
-                self.update(metadata)
+                    self.update(metadata)
             await asyncio.sleep(120)
 
     def update(self, metadata):

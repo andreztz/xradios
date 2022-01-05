@@ -11,6 +11,9 @@ log = logging.getLogger('xradios')
 
 
 class PlayerBase(ABC):
+
+    state = False
+
     @abstractmethod
     def play(self):
         pass
@@ -27,6 +30,10 @@ class PlayerBase(ABC):
         else:
             return station["url"]
 
+    @property
+    def playing(self):
+        return self.state
+
 
 class MPVPlayer(PlayerBase):
 
@@ -37,9 +44,11 @@ class MPVPlayer(PlayerBase):
     def play(self, stationuuid):
         url = self._click_counter(stationuuid)
         self.player.play(url)
+        self.state = True
 
     def stop(self):
         self.player.play("")
+        self.state = False
 
     def pause(self):
         if self.player.pause:
@@ -61,9 +70,11 @@ class VLCPlayer(PlayerBase):
         media = self.instance.media_new(url)
         self.player.set_media(media)
         self.player.play()
+        self.state = True
 
     def stop(self):
         self.player.stop()
+        self.state = False
 
 
 # player = MPVPlayer()
