@@ -101,7 +101,13 @@ def now_playing():
 
 @cmd('favorites')
 def favorites():
-    return [dict(s) for s in db.all()]
+
+    stations = [dict(s) for s in db.all()]
+
+    if stations:
+        return stations
+    else:
+        return rb.stations_by_votes(limit=100)
 
 
 @cmd('add_favorite')
