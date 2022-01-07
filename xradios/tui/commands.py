@@ -1,3 +1,4 @@
+import ast
 import logging
 from prompt_toolkit.contrib.regular_languages import compile
 from xradios.tui.constants import DISPLAY_BUFFER
@@ -12,10 +13,11 @@ from xradios.tui.utils import tags as _tags
 log = logging.getLogger('xradios')
 
 
+# (?P<command>[^\s]+) \s+ (?P<subcommand>[^\s]+) \s+ (?P<term>[^\s].+) |
 COMMAND_GRAMMAR = compile(
     r"""(
-        (?P<command>[^\s]+) \s+ (?P<subcommand>[^\s]+) \s+ (?P<term>[^\s].+) |
-        (?P<command>[^\s]+) \s+ (?P<term>[^\s]+) |
+        (?P<command>[^\s]+)\s+(?P<subcommand>.+)|
+        (?P<command>[^\s]+)\s+(?P<term>[^\s]+)|
         (?P<command>[^\s!]+)
     )"""
 )
@@ -60,6 +62,25 @@ def grabe_from_buffer(buffer, stations, **kwargs):
     index = int(buffer.get_index(**kwargs))
     station = stations[index]
     return index, station
+
+
+def getopts(opts):
+    options = {}
+    opts = opts.strip()
+    for opt in opts.split(','):
+        if opt:
+            opt = opt.strip()
+            name, value = opt.split('=')
+            # TODO:
+            # mover validação para o lado servidor
+            if value.isnumeric():
+                options[name] = int(value)
+            elif value.lower() in ['true', 'false']:
+                value = value.lower()
+                options[name] = ast.literal_eval(value.title())
+            else:
+                options[name] = value
+    return options
 
 
 def cmd(name):
@@ -113,10 +134,12 @@ def pause(event, **kwargs):
 def search(event, **kwargs):
     query = {}
     list_buffer = event.app.layout.get_buffer_by_name(LISTVIEW_BUFFER)
-    query["command"] = kwargs["variables"].get("subcommand")[2:]
-    query["term"] = kwargs["variables"].get("term")
-    stations.new(*proxy.search(**query))
-    list_buffer.update(str(stations))
+    options = kwargs['variables'].get('subcommand')
+    query = getopts(options)
+    
+    if query:
+        stations.new(*proxy.search(**query))
+        list_buffer.update(str(stations))
 
 @cmd('tags')
 def tags(event, **kwargs):

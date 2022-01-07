@@ -79,9 +79,7 @@ def pause():
 
 @cmd("search")
 def search(**kwargs):
-    command = kwargs.get("command")
-    term = kwargs.get("term")
-    response = rb.search(**{command: term})
+    response = rb.search(**kwargs)
     return response
 
 
