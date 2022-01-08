@@ -27,15 +27,19 @@ stop
 Search commands
 ---------------
 
-search bycodec <codec>
-search bycountry <country>
-search byid <id>
-search bylanguage <language>
-search byname <name>
-search bystate <state>
-search bytag <tag>
-search byuuid <uuid>
-search tags
+search option=value, option=value, ....
+
+Example:
+
+search order=votes, limit=1000, hidebroken=true
+
+
+https://de1.api.radio-browser.info/#Advanced_station_search
+
+List tags
+---------
+
+tags
 
 
 Favorites commands
