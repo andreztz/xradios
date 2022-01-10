@@ -16,11 +16,11 @@ from xradios.tui.utils import tags as _tags
 
 log = logging.getLogger('xradios')
 
+# (?P<command>[^\s]+)\s+(?P<term>[^\s]+)|
 
 COMMAND_GRAMMAR = compile(
     r"""(
         (?P<command>[^\s]+)\s+(?P<subcommand>.+)|
-        (?P<command>[^\s]+)\s+(?P<term>[^\s]+)|
         (?P<command>[^\s!]+)
     )"""
 )

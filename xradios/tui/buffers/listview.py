@@ -40,7 +40,7 @@ class ListViewBuffer(Buffer):
 
     def get_index(self, **kwargs):
         variables = kwargs.get("variables", None)
-        index = variables.get("term") if variables else None
+        index = variables.get("subcommand") if variables else None
 
         if index and index.isnumeric():
             return self.line(index)[0]

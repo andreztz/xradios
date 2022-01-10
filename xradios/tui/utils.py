@@ -78,7 +78,7 @@ class StationList(UserList):
                 self.data.append(Station(index=i, **kwargs))
 
         self.sort(key=attrgetter('name'))
-        
+
     def new(self, *args):
         return self.__init__(*args)
 
