@@ -1,5 +1,9 @@
-import ast
 import logging
+import re
+from itertools import chain
+from itertools import tee
+from distutils.util import strtobool
+
 from prompt_toolkit.contrib.regular_languages import compile
 from xradios.tui.constants import DISPLAY_BUFFER
 from xradios.tui.constants import LISTVIEW_BUFFER
@@ -13,7 +17,6 @@ from xradios.tui.utils import tags as _tags
 log = logging.getLogger('xradios')
 
 
-# (?P<command>[^\s]+) \s+ (?P<subcommand>[^\s]+) \s+ (?P<term>[^\s].+) |
 COMMAND_GRAMMAR = compile(
     r"""(
         (?P<command>[^\s]+)\s+(?P<subcommand>.+)|
@@ -56,31 +59,79 @@ def command_line_handler(event):
 
 
 def grabe_from_buffer(buffer, stations, **kwargs):
-    """
-    Retrieves an object, via the line number of a given buffer.
-    """
     index = int(buffer.get_index(**kwargs))
     station = stations[index]
     return index, station
 
 
-def getopts(opts):
-    options = {}
-    opts = opts.strip()
-    for opt in opts.split(','):
-        if opt:
-            opt = opt.strip()
-            name, value = opt.split('=')
-            # TODO:
-            # mover validação para o lado servidor
-            if value.isnumeric():
-                options[name] = int(value)
-            elif value.lower() in ['true', 'false']:
-                value = value.lower()
-                options[name] = ast.literal_eval(value.title())
-            else:
-                options[name] = value
-    return options
+def auto_cast(value):
+    """
+    Helper to convert types.
+    """
+    value = str(value).strip()
+
+    if value.isnumeric():
+        value = int(value)
+    elif value.lower() in ['true', 'false']:
+        value = bool(strtobool(value))
+    return value
+
+
+def getopts(string):
+    opts = {}
+    pattern = '''[a-zA-Z_]+='''
+
+    # checks the indices of each paramters and argument in the string.
+    isymbols = [(m.start(0), m.end(0)) for m in re.finditer(pattern, string)]
+    flatten = list(chain.from_iterable(isymbols))
+
+    def pairwise(iterable):
+        a, b = tee(iterable)
+        next(b, None)
+        return zip(a, b)
+
+    def parse_opts(iterable):
+        for elem in iterable:
+            start, end = elem
+            yield string[start:end]
+        yield string[elem[1]:]  # return the last argument of search command
+
+    last = None
+    search_params = [
+        'name',
+        'nameExact',
+        'country',
+        'countryExact',
+        'countrycode',
+        'state',
+        'stateExact',
+        'tagList',
+        'codec',
+        'bitrateMin',
+        'bitrateMax',
+        'has_geo_info',
+        'has_extended_info',
+        'is_https',
+        'order',
+        'reverse',
+        'offset',
+        'limit',
+        'hidebroken',
+        'tag'
+        ]
+
+    for i in parse_opts(pairwise(flatten)):
+        if '=' in i:
+            # process params
+            key = i[:-1]  # clean paramter `tag=` -> `tag`
+            if key not in search_params:
+                return {}
+            opts.setdefault(key)
+            last = key
+        else:
+            # process args
+            opts.update({last: auto_cast(i)})
+    return opts
 
 
 def cmd(name):
@@ -113,10 +164,6 @@ def play(event, **kwargs):
     metadata = proxy.now_playing()
     display_buffer.update(metadata)
 
-    # from asyncio import get_event_loop
-    # loop = get_event_loop()
-    # loop.create_task(display_buffer.run())
-
 
 @cmd("stop")
 def stop(event, **kwargs):
@@ -136,10 +183,11 @@ def search(event, **kwargs):
     list_buffer = event.app.layout.get_buffer_by_name(LISTVIEW_BUFFER)
     options = kwargs['variables'].get('subcommand')
     query = getopts(options)
-    
+
     if query:
         stations.new(*proxy.search(**query))
         list_buffer.update(str(stations))
+
 
 @cmd('tags')
 def tags(event, **kwargs):
@@ -162,16 +210,19 @@ def favorite(event, **kwargs):
         LISTVIEW_BUFFER
     )
     subcommand = kwargs['variables'].get('subcommand')
-    log.debug(f'{subcommand=}')
     match subcommand:
         case 'add':
-            index, station = grabe_from_buffer(list_view_buffer, stations, **kwargs)
+            index, station = grabe_from_buffer(
+                list_view_buffer, stations, **kwargs
+            )
             station = station.serialize()
             # Removes `index` key before saving
             del station['index']
             proxy.add_favorite(**station)
         case 'remove':
-            index, station = grabe_from_buffer(list_view_buffer, stations, **kwargs)
+            index, station = grabe_from_buffer(
+                list_view_buffer, stations, **kwargs
+            )
             station = station.serialize()
             proxy.remove_favorite(**station)
         case _:
