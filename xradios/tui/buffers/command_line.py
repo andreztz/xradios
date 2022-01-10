@@ -7,23 +7,26 @@ from xradios.tui.constants import COMMAND_LINE_BUFFER
 
 COMMANDS = [
     "play",
-    "pause",
     "stop",
-    "rec",
-    "info",
-    "help",
-    "list",
-    "bytag",
-    "bycodec",
-    "bycountry",
-    "bylanguage",
-    "byname",
-    "bystate",
-    "byuuid",
     "tags",
     "exit",
     "search",
-    "nowplaying",
+    "name",
+    "name_exact",
+    "country",
+    "country_exact",
+    "countrycode",
+    "state",
+    "state_exact",
+    "language",
+    "language_exact",
+    "tag",
+    "tag_exact",
+    "bitrate_min",
+    "bitrate_max",
+    "order",
+    "reverse"
+    "limit"
 ]
 
 
