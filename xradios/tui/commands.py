@@ -58,12 +58,6 @@ def command_line_handler(event):
             call_command_handler(command, event, variables=variables)
 
 
-def grabe_from_buffer(buffer, stations, **kwargs):
-    index = int(buffer.get_index(**kwargs))
-    station = stations[index]
-    return index, station
-
-
 def auto_cast(value):
     """
     Helper to convert types.
@@ -131,12 +125,8 @@ def exit(event, **kwargs):
 
 @cmd("play")
 def play(event, **kwargs):
-    list_view_buffer = event.app.layout.get_buffer_by_name(LISTVIEW_BUFFER)
-    index, station = grabe_from_buffer(
-        list_view_buffer,
-        stations,
-        **kwargs
-    )
+    index = int(event.current_buffer.document.cursor_position_row)
+    station = stations[index]
     proxy.play(**station.serialize())
     display_buffer = event.app.layout.get_buffer_by_name(DISPLAY_BUFFER)
     metadata = proxy.now_playing()
