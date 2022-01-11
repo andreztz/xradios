@@ -24,7 +24,7 @@ play <line-number>
 stop
 
 
-Search commands
+Search command
 ---------------
 
 search option=value, option=value, ....
@@ -34,7 +34,34 @@ Example:
 search order=votes, limit=1000, hidebroken=true
 
 
-https://de1.api.radio-browser.info/#Advanced_station_search
+## Search paramters
+
+- name: str
+- nameExact: bool (default=false)
+- country: str
+- countryExact: bool (default=false)
+- countrycode: str
+- state: str
+- stateExact: bool (default=false)
+- language: str
+- languageExact: bool (default=false)
+- tag: str
+- tagExact: bool (default=false)
+- codec: str
+- bitrateMin: int (default=0)
+- bitrateMax: int (default=1000000)
+- has_geo_info: bool (default=not set)
+- has_extended_info: bool (default=not set)
+- is_https: bool (default=not set)
+- order: str (default=name)
+- reverse: bool (default=false)
+- offset: int (default=0)
+- limit: int (default=1000000)
+- hidebroken: bool (default=false)
+
+
+see details in:
+    https://de1.api.radio-browser.info/#Advanced_station_search
 
 List tags
 ---------
