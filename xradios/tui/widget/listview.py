@@ -43,14 +43,16 @@ class ListView:
 
         @kb.add(Keys.ControlD)
         def _(event):
+            index = int(event.current_buffer.document.cursor_position_row) + 1
             call_command_handler(
-                'favorite', event, variables={'subcommand': 'add'}
+                'favorite-add', event, variables={'subcommand': index}
             )
 
         @kb.add(Keys.ControlA)
         def _(event):
+            index = int(event.current_buffer.document.cursor_position_row) + 1
             call_command_handler(
-                'favorite', event, variables={'subcommand': 'remove'}
+                'favorite-rm', event, variables={'subcommand': index}
             )
 
         return kb

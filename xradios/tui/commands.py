@@ -202,30 +202,31 @@ def help(event, **kwargs):
     event.app.layout.focus(popup_buffer)
 
 
-@cmd('favorite')
-def favorite(event, **kwargs):
+@cmd('favorite-add')
+def favorite_add(event, **kwargs):
     list_view_buffer = event.app.layout.get_buffer_by_name(
         LISTVIEW_BUFFER
     )
-    subcommand = kwargs['variables'].get('subcommand')
-    match subcommand:
-        case 'add':
-            index, station = grabe_from_buffer(
-                list_view_buffer, stations, **kwargs
-            )
-            station = station.serialize()
-            # Removes `index` key before saving
-            del station['index']
-            proxy.add_favorite(**station)
-        case 'remove':
-            index, station = grabe_from_buffer(
-                list_view_buffer, stations, **kwargs
-            )
-            station = station.serialize()
-            proxy.remove_favorite(**station)
-        case _:
-            log.debug(f'{subcommand!r} not yet implemented')
+    arg = kwargs['variables'].get('subcommand')
+    index = int(arg) - 1
+    station = stations[index]
+    station = station.serialize()
+    # Removes `index` key before saving
+    proxy.add_favorite(**station)
+    stations.new(*proxy.favorites())
+    list_view_buffer.update(str(stations))
 
+
+@cmd('favorite-rm')
+def favorite_remove(event, **kwargs):
+    list_view_buffer = event.app.layout.get_buffer_by_name(
+        LISTVIEW_BUFFER
+    )
+    arg = kwargs['variables'].get('subcommand')
+    index = int(arg) - 1
+    station = stations[index]
+    station = station.serialize()
+    proxy.remove_favorite(**station)
     stations.new(*proxy.favorites())
     list_view_buffer.update(str(stations))
 

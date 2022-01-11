@@ -45,8 +45,8 @@ tags
 Favorites commands
 ------------------
 
-favorite add <line-number> 
-favorite rm <line-number>
+favorite-add <line-number>
+favorite-rm <line-number>
 favorites
 
 
