@@ -29,7 +29,6 @@ def plugin_name(name):
 
 @dataclass
 class MetadataState:
-    index: str = field(init=False, default="")
     name: str = field(init=False, default="")
     song: str = field(init=False, default="")
     homepage: str = field(init=False, default="")
@@ -73,7 +72,6 @@ class MetadataManager:
     def __call__(self, station):
         if station:
             self.station = station
-            self.s.index = station["index"]
             self.s.homepage = station["homepage"]
             self.s.name = station["name"]
 

@@ -1,12 +1,10 @@
 from collections import UserList
 from dataclasses import asdict
 from dataclasses import dataclass
-from operator import attrgetter
 
 
 @dataclass(frozen=True)
 class Station:
-    index: str
     stationuuid: str
     name: str
     url: str
@@ -28,7 +26,6 @@ class Station:
 
 @dataclass(frozen=True)
 class Tag:
-    index: str
     name: str
     stationcount: str
 
@@ -49,13 +46,13 @@ class TagList(UserList):
     def __init__(self, *tags):
         self.data = []
         if tags:
-            for i, t in enumerate(tags, 1):
+            for t in tags:
                 kwargs = dict(
                     filter(
                         lambda elem: elem[0] in Tag.fields(), t.items()
                     )
                 )
-                self.data.append(Tag(index=i, **kwargs))
+                self.data.append(Tag(**kwargs))
         self.sort(key=lambda t: t.stationcount, reverse=True)
 
     def new(self, *args):
@@ -69,15 +66,13 @@ class StationList(UserList):
     def __init__(self, *stations):
         self.data = []
         if stations:
-            for i, s in enumerate(stations, 1):
+            for s in stations:
                 kwargs = dict(
                     filter(
                         lambda elem: elem[0] in Station.fields(), s.items()
                     )
                 )
-                self.data.append(Station(index=i, **kwargs))
-
-        self.sort(key=attrgetter('name'))
+                self.data.append(Station(**kwargs))
 
     def new(self, *args):
         return self.__init__(*args)
