@@ -77,7 +77,7 @@ def auto_cast(value):
     return value
 
 
-def getopts(string):
+def getopts(string, valid_params):
     opts = {}
     pattern = '''[a-zA-Z_]+='''
 
@@ -97,34 +97,12 @@ def getopts(string):
         yield string[elem[1]:]  # return the last argument of search command
 
     last = None
-    search_params = [
-        'name',
-        'nameExact',
-        'country',
-        'countryExact',
-        'countrycode',
-        'state',
-        'stateExact',
-        'tagList',
-        'codec',
-        'bitrateMin',
-        'bitrateMax',
-        'has_geo_info',
-        'has_extended_info',
-        'is_https',
-        'order',
-        'reverse',
-        'offset',
-        'limit',
-        'hidebroken',
-        'tag'
-        ]
 
     for i in parse_opts(pairwise(flatten)):
         if '=' in i:
             # process params
             key = i[:-1]  # clean paramter `tag=` -> `tag`
-            if key not in search_params:
+            if key not in valid_params:
                 return {}
             opts.setdefault(key)
             last = key
@@ -179,11 +157,31 @@ def pause(event, **kwargs):
 
 @cmd("search")
 def search(event, **kwargs):
-    query = {}
+    valid_params = [
+        'name',
+        'nameExact',
+        'country',
+        'countryExact',
+        'countrycode',
+        'state',
+        'stateExact',
+        'tagList',
+        'codec',
+        'bitrateMin',
+        'bitrateMax',
+        'has_geo_info',
+        'has_extended_info',
+        'is_https',
+        'order',
+        'reverse',
+        'offset',
+        'limit',
+        'hidebroken',
+        'tag'
+        ]
     list_buffer = event.app.layout.get_buffer_by_name(LISTVIEW_BUFFER)
     options = kwargs['variables'].get('subcommand')
-    query = getopts(options)
-
+    query = getopts(options, valid_params)
     if query:
         stations.new(*proxy.search(**query))
         list_buffer.update(str(stations))
