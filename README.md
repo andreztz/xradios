@@ -4,7 +4,8 @@
 
 > Search and play your favorite Internet radio station.
 
-<https://user-images.githubusercontent.com/7193527/144721555-fc18e17c-38a6-42f2-ad4e-df40542e24f2.mp4>
+<https://user-images.githubusercontent.com/7193527/149377973-fe325cd4-6f55-4b68-9c79-a82a6cf42c45.mp4>
+
 
 ## Installation
 
