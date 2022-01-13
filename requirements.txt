@@ -1,3 +1,4 @@
+appdirs>=1.4.4
 prompt-toolkit>=3.0.8
 notify-send>=0.0.20
 Pygments>=2.7.3
