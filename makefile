@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 PYTHON = python3
 TEST_PATH = ./tests/
-FLAKE8_EXCLUDE = .venv,.eggs,,tox,.git,__pycache__,*.pyc
+FLAKE8_EXCLUDE = .venv,.eggs,.tox,.git,__pycache__,*.pyc
 
 
 all:
@@ -41,10 +41,19 @@ help:
 	@echo "        Check style with flake8."
 	@echo "    black"
 	@echo "        Run black"
+	@echo "	   install"
+	@echo "        Install xradios"
+	@echo "	   install-dev"
+	@echo "	       Create dev setup."
 
 install:
 	pip install --upgrade pip
 	pip install -e .
+
+install-dev:
+	pip install --upgrade pip
+	pip install -e .[dev]
+	pre-commit install
 
 test:
 	${PYTHON} -m pytest ${TEST_PATH}
