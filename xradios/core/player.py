@@ -60,22 +60,4 @@ class MPVPlayer(PlayerBase):
         self.player.terminate()
 
 
-class VLCPlayer(PlayerBase):
-    import vlc
-    instance = vlc.Instance("--input-repeat=-1")  # --verbose 0
-    player = instance.media_player_new()
-
-    def play(self, stationuuid):
-        url = self._click_counter(stationuuid)
-        media = self.instance.media_new(url)
-        self.player.set_media(media)
-        self.player.play()
-        self.state = True
-
-    def stop(self):
-        self.player.stop()
-        self.state = False
-
-
-# player = MPVPlayer()
-player = VLCPlayer()
+player = MPVPlayer()
