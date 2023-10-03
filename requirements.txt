@@ -8,3 +8,4 @@ pyradios>=1.0.0
 pluginbase>=1.0.1
 psutil>=5.8.0
 tinydb>=4.5.2
+cmd-parser>=0.0.1.dev2

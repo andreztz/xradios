@@ -8,7 +8,6 @@ from xradios.tui.constants import COMMAND_LINE_BUFFER
 COMMANDS = [
     "play",
     "stop",
-    "tags",
     "exit",
     "search",
     "name=",
@@ -31,8 +30,11 @@ COMMANDS = [
     "reverse=",
     "limit=",
     "hidebroken=",
-    "favorite-add",
-    "favorite-rm",
+    "bookmarks",
+    "home",
+    "add=",
+    "rm=",
+    "tags",
 ]
 
 
