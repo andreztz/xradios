@@ -27,7 +27,7 @@ stop
 Search command
 ---------------
 
-search option=value, option=value, ....
+search option=value1, option="value 2", ....
 
 Example:
 
@@ -66,12 +66,12 @@ List tags
 tags
 
 
-Favorites commands
+Bookmarks commands
 ------------------
 
-favorite-add <line-number>
-favorite-rm <line-number>
-favorites
+bookmarks add=<line-number>
+bookmarks rm=<line-number>
+bookmarks
 
 
 Help commands

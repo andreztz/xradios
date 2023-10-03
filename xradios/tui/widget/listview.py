@@ -45,14 +45,14 @@ class ListView:
         def _(event):
             index = int(event.current_buffer.document.cursor_position_row) + 1
             call_command_handler(
-                'favorite-add', event, variables={'subcommand': index}
+                'bookmarks', event, **{'add': index}
             )
-
+        # TODO: change shortcut to remove bookmark -> Ctrl + ??
         @kb.add(Keys.ControlA)
         def _(event):
             index = int(event.current_buffer.document.cursor_position_row) + 1
             call_command_handler(
-                'favorite-rm', event, variables={'subcommand': index}
+                'bookmarks', event, **{'rm': index}
             )
 
         return kb
