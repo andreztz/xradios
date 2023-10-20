@@ -7,7 +7,7 @@ from pyradios import RadioBrowser
 
 
 rb = RadioBrowser()
-log = logging.getLogger('xradios')
+log = logging.getLogger('xradiosd')
 
 
 class PlayerBase(ABC):
@@ -38,8 +38,6 @@ class PlayerBase(ABC):
 class MPVPlayer(PlayerBase):
 
     player = MPV()
-    # player.loop_playlist = "inf"
-    player.set_loglevel = "no"
 
     def play(self, stationuuid):
         url = self._click_counter(stationuuid)
