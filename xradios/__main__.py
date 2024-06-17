@@ -1,3 +1,5 @@
+import sys
+import asyncio
 import subprocess
 
 from xradios.tui import TUI
@@ -22,7 +24,6 @@ def main():
     )
 
     tui = TUI()
-    tui.initialize()
-    tui.run()
+    asyncio.get_event_loop().run_until_complete(tui.run())
     proc.terminate()
-    proc.wait(timeout=2)
+    sys.exit(proc.wait(timeout=5))

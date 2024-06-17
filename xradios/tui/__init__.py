@@ -1,3 +1,4 @@
+import asyncio
 from asyncio import get_event_loop
 
 from prompt_toolkit.application import Application
@@ -28,7 +29,6 @@ class TUI:
         stations.new(*response)
         list_buffer.update(str(stations))
         display_buffer = self.app.layout.get_buffer_by_name(DISPLAY_BUFFER)
-
         self.loop.create_task(display_buffer.run())
 
     def get_favorites(self):
@@ -42,6 +42,6 @@ class TUI:
             else:
                 return response
 
-
-    def run(self):
-        self.app.run()
+    async def run(self):
+        self.initialize()
+        await self.app.run_async()
