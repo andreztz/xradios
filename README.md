@@ -9,8 +9,11 @@
 
 ## Installation
 
+install [pipx](https://pipx.pypa.io/stable/installation/)
+
+
 ```bash
-$ pip install xradios
+$ pipx install git+https://github.com/andreztz/xradios
 ```
 
 ## Usage example
