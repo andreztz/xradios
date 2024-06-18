@@ -9,11 +9,16 @@
 
 ## Installation
 
-install [pipx](https://pipx.pypa.io/stable/installation/)
-
+Install [pipx](https://pipx.pypa.io/stable/installation/)
 
 ```bash
-$ pipx install git+https://github.com/andreztz/xradios
+pipx install git+https://github.com/andreztz/xradios
+```
+
+or
+
+```bash
+pipx install xradios
 ```
 
 ## Usage example
@@ -21,11 +26,8 @@ $ pipx install git+https://github.com/andreztz/xradios
 Open the terminal, and run the following command
 
 ```bash
-
 $ xradios
-
 ```
-
 
 ## Development setup
 
@@ -35,14 +37,13 @@ $ pip install -e .
 ```
 
 ## Release History
-
-    -   Work in progress
+    - Work in progress
 
 ## Meta
 
 André P. Santos – [@ztzandre](https://twitter.com/ztzandre) – andreztz@gmail.com
 
-Distributed under the XYZ license. See `LICENSE` for more information.
+Distributed under the MIT license. See `LICENSE` for more information.
 
 [https://github.com/andreztz/xradios](https://github.com/andreztz/)
 
