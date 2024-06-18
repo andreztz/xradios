@@ -9,20 +9,17 @@ HELP_TEXT = """
 xradios
 -------
 
-
-- Press `:` to show the commandline.
+- Press `:` to show the command prompt.
 - Press `Ctrl + Up` or `Ctrl + Down` to move the focus.
 - Press `UP` or `Down` to navigate between radio stations
 - To close xradios press `Ctrl + q` or `:quit` or `:exit`.
 - To close this window, press F1, ESC, or change the focus.
-
 
 Player commands
 ---------------
 
 play <line-number>
 stop
-
 
 Search command
 ---------------
@@ -32,7 +29,6 @@ search option=value1, option="value 2", ....
 Example:
 
 search order=votes, limit=1000, hidebroken=true
-
 
 ## Search paramters
 
@@ -65,14 +61,12 @@ List tags
 
 tags
 
-
 Bookmarks commands
 ------------------
 
 bookmarks add=<line-number>
 bookmarks rm=<line-number>
 bookmarks
-
 
 Help commands
 --------------
