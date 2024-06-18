@@ -33,11 +33,13 @@ def call_command_handler(command, *args, **kwargs):
 
 
 def command_line_handler(event):
+    if not event.current_buffer.text:
+        return
+
     command_string = ':' + event.current_buffer.text
-
     options = asdict(parse(string=command_string))
-
     command = options.get('command', '')
+
     if not has_command_handler(command):
         return
 
