@@ -1,11 +1,11 @@
-import requests
+import httpx
 
 
 URL = "https://rms.api.bbc.co.uk/v2/services/bbc_radio_one/segments/latest"
 
 
 def run(*args, **kwargs):
-    resp = requests.get(URL)
+    resp = httpx.get(URL)
     data = resp.json()
     try:
         artist = data["data"][0]["titles"]["primary"]
