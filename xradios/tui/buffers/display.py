@@ -42,8 +42,12 @@ class DisplayBuffer(Buffer):
         song = metadata.get('song')
 
         if song:
-            content = f'\n{name:<30} {homepage}\n\n{song}'
-            notification(name, message=song, app_name='xradios', timeout=5000)
+            content = f"\n{name:<30} {homepage}\n\n{song}"
+            try:
+                notification(name, message=song, app_name="xradios", timeout=5000)
+            except Exception:
+                pass
+                # TODO: log exception to text file
         else:
             content = f'\n{name:<30}\n\n{homepage}'
         
