@@ -19,7 +19,17 @@ class DisplayBuffer(Buffer):
         super().__init__(
             document=Document(content, 0), read_only=True, name=DISPLAY_BUFFER
         )
-        self.metadata = None
+        self._metadata = None
+
+    @property
+    def metadata(self):
+        return self._metadata
+
+    @metadata.setter
+    def metadata(self, value):
+        if value != self._metadata:
+            self._metadata = value
+            self.update(value)
 
     def clear(self):
         self.set_document(Document('', 0), bypass_readonly=True)
@@ -31,9 +41,8 @@ class DisplayBuffer(Buffer):
             except Exception:
                 pass
             else:
-                if result != self.metadata and all(result.values()):
+                if all(result.values()):
                     self.metadata = result
-                    self.update(result)
             await asyncio.sleep(30)
 
     def update(self, metadata):
