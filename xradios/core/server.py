@@ -49,7 +49,7 @@ log.info(f'Log level {effective_log_level=}')
 
 
 rb = RadioBrowser()
-db = TinyDB(xradios_data_dir / 'favorites.json')
+db = TinyDB(xradios_data_dir / "bookmarks.json")
 
 
 command_handlers = {}
