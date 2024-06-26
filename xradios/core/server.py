@@ -1,16 +1,10 @@
 import logging
-import os
 import sys
 import signal
 
-from pathlib import Path
 
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
-
-from appdirs import user_data_dir
-from appdirs import user_log_dir
-from appdirs import user_config_dir
 
 from pyradios import RadioBrowser
 
@@ -19,33 +13,12 @@ from tinydb import TinyDB
 
 from xradios.core.metadata import metadata_manager
 from xradios.core.player import player
+from xradios import xradios_data_dir
 
 
-app_name = 'xradios'
-server_name = 'xradiosd'
-
-xradios_config_dir = Path(user_config_dir(appname=app_name))
-xradios_config_dir.mkdir(parents=True, exist_ok=True)
-
-xradios_data_dir = Path(user_data_dir(appname=app_name))
-xradios_data_dir.mkdir(parents=True, exist_ok=True)
-
-xradios_log_dir = Path(user_log_dir(appname=app_name))
-xradios_log_dir.mkdir(parents=True, exist_ok=True)
-
-log_level = getattr(logging, os.environ.get('XRADIOS_LOG_LEVEL', 'INFO'))
-log_format = '%(levelname)s - %(name)s - %(message)s'
-log_file = 'xradios.log'
-
-logging.basicConfig(
-    filename=xradios_log_dir / log_file,
-    level=log_level,
-    format=log_format
-    )
-
-log = logging.getLogger('xradios')
+log = logging.getLogger("xradiosd")
 effective_log_level = logging.getLevelName(log.getEffectiveLevel())
-log.info(f'Log level {effective_log_level=}')
+log.info(f"Log level {effective_log_level=}")
 
 
 rb = RadioBrowser()
