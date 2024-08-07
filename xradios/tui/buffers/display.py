@@ -41,7 +41,7 @@ class DisplayBuffer(Buffer):
             except Exception:
                 pass
             else:
-                if all(result.values()):
+                if result and all(result.values()):
                     self.metadata = result
             await asyncio.sleep(30)
 
