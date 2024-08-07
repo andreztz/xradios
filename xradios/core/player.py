@@ -11,7 +11,6 @@ log = logging.getLogger('xradiosd')
 
 
 class PlayerBase(ABC):
-
     state = False
 
     @abstractmethod
@@ -35,9 +34,24 @@ class PlayerBase(ABC):
         return self.state
 
 
-class MPVPlayer(PlayerBase):
+def log_handler(level, prefix, message):
+    func = getattr(log, level.lower(), log.info)  # getattr default -> log.info
+    func(f"{prefix}: {message}")
 
-    player = MPV()
+
+class MPVPlayer(PlayerBase):
+    extra_mpv_opts = {
+        "cache": True,
+        "cache_secs": 10,
+    }
+
+    player = MPV(
+        log_handler=log_handler,
+        loglevel=logging.getLevelName(log.root.level).lower(),
+        **extra_mpv_opts,
+    )
+    log.debug(f"mpv --cache ---> {player['cache']}")
+    log.debug(f"mpv --cache-secs ---> {player.cache_secs}")
 
     def play(self, stationuuid):
         url = self._click_counter(stationuuid)
