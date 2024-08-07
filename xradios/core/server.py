@@ -70,38 +70,31 @@ def now_playing():
     return
 
 
-@cmd('favorites')
+@cmd("favorites")
 def favorites():
-
     stations = [dict(s) for s in db.all()]
-
     if stations:
         return stations
     else:
         return rb.stations_by_votes(limit=100)
 
 
-@cmd('add_favorite')
+@cmd("add_favorite")
 def add_favorite(**station):
     # Check if the station has already been added to favorites
-    if not db.search(Query().stationuuid == station['stationuuid']):
+    if not db.search(Query().stationuuid == station["stationuuid"]):
         db.insert(station)
-    log.debug(f'Adding a new station to favorites {station=}')
+    log.debug(f"Adding a new station to favorites {station=}")
 
 
-@cmd('remove_favorite')
+@cmd("remove_favorite")
 def remove_favorite(**station):
-    db.remove(Query().stationuuid == station['stationuuid'])
-    log.debug(f'Removing a station from favorites {station=}')
+    db.remove(Query().stationuuid == station["stationuuid"])
+    log.debug(f"Removing a station from favorites {station=}")
 
 
 class RequestHandler(SimpleXMLRPCRequestHandler):
     rpc_paths = ("/", "/RPC2")
-    # def log_request(self, code="-", size="-"):
-    #     from xradios.logger import log
-    #     log.info(f'RPC status code {code}')
-    #     BaseHTTPRequestHandler.log_message = lambda *args: print(*args)
-    #     BaseHTTPRequestHandler.log_request(self, code, size)
 
 
 class RPCServer:
@@ -112,7 +105,6 @@ class RPCServer:
             requestHandler=RequestHandler,
             use_builtin_types=True,
         )
-        self._serv.rpc_paths = ("/", "/RPC2")  # default
         self._serv.register_introspection_functions()
 
         for key, value in command_handlers.items():
@@ -120,7 +112,6 @@ class RPCServer:
             self.register_function(getattr(self, key))
 
     def register_function(self, function, name=None):
-        # https://stackoverflow.com/questions/119802/using-kwargs-with-simplexmlrpcserver-in-python
         def _function(args, kwargs):
             return function(*args, **kwargs)
 
@@ -136,15 +127,14 @@ class RPCServer:
 
 def sigterm_handler(signo, frame, server):
     server.stop()
-    log.info('Shutdown server...')
+    log.info("Shutdown server...")
     raise SystemExit(0)
 
 
 def run(host="", port=10000):
     server = RPCServer((host, port))
     signal.signal(
-        signal.SIGTERM,
-        lambda signo, frame: sigterm_handler(signo, frame, server)
+        signal.SIGTERM, lambda signo, frame: sigterm_handler(signo, frame, server)
     )
     log.info(f"Serving XML-RPC port: {port}")
     server.serve_forever()
