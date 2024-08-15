@@ -1,20 +1,16 @@
 import logging
-import sys
 import signal
+import sys
 
-
-from xmlrpc.server import SimpleXMLRPCServer
-from xmlrpc.server import SimpleXMLRPCRequestHandler
-
+from jsonrpclib.SimpleJSONRPCServer import SimpleJSONRPCRequestHandler
+from jsonrpclib.SimpleJSONRPCServer import SimpleJSONRPCServer
 from pyradios import RadioBrowser
-
 from tinydb import Query
 from tinydb import TinyDB
 
+from xradios import xradios_data_dir
 from xradios.core.metadata import metadata_manager
 from xradios.core.player import player
-from xradios import xradios_data_dir
-
 
 log = logging.getLogger("xradiosd")
 effective_log_level = logging.getLevelName(log.getEffectiveLevel())
@@ -31,6 +27,7 @@ command_handlers = {}
 def cmd(name):
     def decorator(func):
         command_handlers[name] = func
+
     return decorator
 
 
@@ -93,17 +90,15 @@ def remove_favorite(**station):
     log.debug(f"Removing a station from favorites {station=}")
 
 
-class RequestHandler(SimpleXMLRPCRequestHandler):
-    rpc_paths = ("/", "/RPC2")
+class RequestHandler(SimpleJSONRPCRequestHandler):
+    pass
 
 
 class RPCServer:
     def __init__(self, address):
-        self._serv = SimpleXMLRPCServer(
+        self._serv = SimpleJSONRPCServer(
             address,
-            allow_none=True,
             requestHandler=RequestHandler,
-            use_builtin_types=True,
         )
         self._serv.register_introspection_functions()
 
@@ -112,7 +107,7 @@ class RPCServer:
             self.register_function(getattr(self, key))
 
     def register_function(self, function, name=None):
-        def _function(args, kwargs):
+        def _function(*args, **kwargs):
             return function(*args, **kwargs)
 
         _function.__name__ = function.__name__
@@ -134,7 +129,8 @@ def sigterm_handler(signo, frame, server):
 def run(host="", port=10000):
     server = RPCServer((host, port))
     signal.signal(
-        signal.SIGTERM, lambda signo, frame: sigterm_handler(signo, frame, server)
+        signal.SIGTERM,
+        lambda signo, frame: sigterm_handler(signo, frame, server),
     )
     log.info(f"Serving XML-RPC port: {port}")
     server.serve_forever()
