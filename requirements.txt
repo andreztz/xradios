@@ -1,7 +1,7 @@
 anyio==4.4.0
 appdirs==1.4.4
 certifi==2024.7.4
-cmd-parser==0.0.1.dev2
+cmd-parser==0.0.1
 h11==0.14.0
 httpcore==1.0.5
 httpx==0.27.0
