@@ -1,7 +1,6 @@
 import httpx
 
-
-URL = "https://rms.api.bbc.co.uk/v2/services/bbc_radio_one/segments/latest"
+URL = "https://rms.api.bbc.co.uk/v2/services/bbc_radio_one/segments/latest?experience=domestic&offset=0&limit=1"
 
 
 def run(*args, **kwargs):
