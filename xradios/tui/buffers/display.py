@@ -36,12 +36,26 @@ def _notification(name, message, app_name="xradios", timeout=5000):
         )
 
     try:
-        subprocess.run(
-            ["notify-send", name, message, "-a", app_name, "-t", str(timeout)],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
+        proc = subprocess.run(
+            [
+                "notify-send",
+                name,
+                message,
+                "-a",
+                app_name,
+                "-t",
+                str(timeout)
+             ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
             timeout=5,  # Segurança contra processos travados
+            check=True
         )
+        if proc.returncode != 0:
+            log.debug(
+                f"Failure in subprocess\nstdout: {proc.stdout.decode()}\n"
+                f"stderr: {proc.stderr.decode()}"
+            )
     except subprocess.CalledProcessError as exc:
         log.error(
             f"Failure to send notification via notify-send command: {exc}"
