@@ -43,6 +43,7 @@ class MPVPlayer(PlayerBase):
     extra_mpv_opts = {
         "cache": True,
         "cache_secs": 10,
+        "loop-playlist": "force"
     }
 
     player = MPV(
