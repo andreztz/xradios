@@ -61,11 +61,10 @@ def tags():
 
 @cmd("now_playing")
 def now_playing():
-    metadata_manager.get()
     if player.playing:
+        metadata_manager.get()
         return metadata_manager.state()
-    return
-
+    return 
 
 @cmd("favorites")
 def favorites():
