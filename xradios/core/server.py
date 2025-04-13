@@ -25,6 +25,7 @@ command_handlers = {}
 
 
 def cmd(name):
+    """Decorator to register JSON-RPC methods."""
     def decorator(func):
         command_handlers[name] = func
 
@@ -33,34 +34,40 @@ def cmd(name):
 
 @cmd("play")
 def play(**station):
+    """Starts playback of a radio station."""
     metadata_manager(station)
     player.play(station.get("stationuuid"))
 
 
 @cmd("stop")
 def stop():
+    """Stop the current playback."""
     player.stop()
 
 
 @cmd("pause")
 def pause():
+    """Pauses the current playback"""
     player.pause()
 
 
 @cmd("search")
 def search(**kwargs):
+    """Searches for radio stations based on criteria."""
     response = rb.search(**kwargs)
     return response
 
 
 @cmd("tags")
 def tags():
+    """Returns the available tags for stations."""
     response = rb.tags()
     return response
 
 
 @cmd("now_playing")
 def now_playing():
+    """Returns information about the currently playing station."""
     if player.playing:
         metadata_manager.get()
         return metadata_manager.state()
@@ -68,6 +75,7 @@ def now_playing():
 
 @cmd("favorites")
 def favorites():
+    """Returns the list of favorite stations or suggestions if empty."""
     stations = [dict(s) for s in db.all()]
     if stations:
         return stations
@@ -77,6 +85,7 @@ def favorites():
 
 @cmd("add_favorite")
 def add_favorite(**station):
+    """Adds a station to favorites."""
     # Check if the station has already been added to favorites
     if not db.search(Query().stationuuid == station["stationuuid"]):
         db.insert(station)
@@ -85,6 +94,7 @@ def add_favorite(**station):
 
 @cmd("remove_favorite")
 def remove_favorite(**station):
+    """Removes a station from favorites."""
     db.remove(Query().stationuuid == station["stationuuid"])
     log.debug(f"Removing a station from favorites {station=}")
 
