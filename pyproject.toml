@@ -1,0 +1,47 @@
+[project]
+name = "xradios"
+version = "0.1.0"
+description = "Search, bookmark, and stream internet radio stations"
+readme = "README.md"
+authors = [
+    { name = "André P. Santos", email = "andreztz@gmail.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "appdirs>=1.4.4",
+    "click>=8.1.8",
+    "cmd-parser>=0.0.1",
+    "jsonrpclib-pelix>=0.4.3.4",
+    "pluginbase>=1.0.1",
+    "pyradios>=2.1.0",
+    "python-mpv>=1.0.7",
+    "streamscrobbler3>=0.0.4",
+    "textual>=3.1.0",
+    "tinydb>=4.8.2",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.11.6",
+    "textual-dev>=1.7.0",
+]
+
+[project.scripts]
+xradios = "xradios:main"
+xradiosd = "xradiosd:main"
+
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.lint]
+select = ['I', 'F', 'E', 'W', 'PL', 'PT']
+extend-select = ["E501"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["xradios", "xradiosd"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+

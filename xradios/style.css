@@ -1,0 +1,19 @@
+.data_list {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow-x: auto;
+}
+
+.tab_content {
+    padding: 0;
+    border: heavy green;
+}
+
+.tab_pane {
+    padding: 0;
+}
+
+.inactive {
+    display: none;
+}
