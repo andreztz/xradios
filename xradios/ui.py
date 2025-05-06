@@ -7,6 +7,7 @@ from textual.binding import Binding
 from textual.message import Message
 from textual.reactive import reactive
 from textual.screen import Screen
+from textual.suggester import Suggester
 from textual.validation import Function
 from textual.widget import Widget
 from textual.widgets import (
@@ -23,6 +24,14 @@ from textual.widgets.data_table import DuplicateKey
 from textual.worker import Worker, get_current_worker
 
 from xradios.client import proxy
+
+COMMAND_LIST = [
+    ":search",
+    "name=",
+    "name_exact=",
+    "tag=",
+    "tags=",
+]
 
 
 def _command_validator(command):
@@ -148,6 +157,22 @@ class SubmitCommandLineMessage(Message, bubble=True):
         super().__init__()
 
 
+class CommandLineSuggester(Suggester):
+    def __init__(
+        self, *, use_cache: bool = True, case_sensitive: bool = False
+    ) -> None:
+        super().__init__(use_cache=use_cache, case_sensitive=case_sensitive)
+
+    async def get_suggestion(self, value: str) -> str | None:
+        hit = value[::-1].split()[0][::-1]
+
+        for cmd in COMMAND_LIST:
+            if cmd.startswith(hit):
+                return value.replace(hit, cmd)
+
+        return None
+
+
 class CommandLine(Input):
     """
     Widget for run command
@@ -195,6 +220,9 @@ class CommandLine(Input):
             validate_on=["submitted"],
             validators=[Function(_command_validator, "Input is not command")],
             select_on_focus=False,
+            suggester=CommandLineSuggester(
+                use_cache=False, case_sensitive=True
+            ),
         )
 
     def action_close_command_mode(self):
