@@ -611,14 +611,14 @@ wheels = [
 
 [[package]]
 name = "pyradios"
-version = "2.1.0"
+version = "2.1.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "httpx" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e3/24/350a91a39880748864bd8b883cd3fb22b9f298ea89de014c58d610d13006/pyradios-2.1.0.tar.gz", hash = "sha256:5d3a70f1b805668df93c99e0afda30794e9f637280a6126cac48642b35872c80", size = 13794, upload-time = "2023-12-13T10:54:33.135Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/0c/ee/42f40727e6eacaeb6a4ae257e6bead4761c2c217eb8ae3585ef94481e062/pyradios-2.1.1.tar.gz", hash = "sha256:15101dd4cf09648b2880b6bf5bbf0841d74cc46d19f2d00ff88895b4753d7e9e", size = 15038, upload-time = "2025-04-28T17:15:57.202Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c7/01/b71fb0f12ad7609a857a2dd3e8e6bff700656d2f58297034df42adec34e2/pyradios-2.1.0-py3-none-any.whl", hash = "sha256:6dbea430c0dc41cf13306baeb763cbaada153c40bdbd6c4907210330e8575ebf", size = 9538, upload-time = "2023-12-13T10:54:32.071Z" },
+    { url = "https://files.pythonhosted.org/packages/3a/11/89dd15448a55406f1c1f01fc648268639f0312fcdca150e1d3e5f94d69ba/pyradios-2.1.1-py3-none-any.whl", hash = "sha256:e19f24163c379f7cdb867b44d49598c2dc3600d5461f047d26ca8e71c0cd9858", size = 10383, upload-time = "2025-04-28T17:15:54.013Z" },
 ]
 
 [[package]]
@@ -785,7 +785,7 @@ wheels = [
 
 [[package]]
 name = "xradios"
-version = "0.1.0"
+version = "0.1.0.dev1"
 source = { editable = "." }
 dependencies = [
     { name = "appdirs" },
@@ -814,7 +814,7 @@ requires-dist = [
     { name = "cmd-parser", specifier = ">=0.0.1" },
     { name = "jsonrpclib-pelix", specifier = ">=0.4.3.4" },
     { name = "pluginbase", specifier = ">=1.0.1" },
-    { name = "pyradios", specifier = ">=2.1.0" },
+    { name = "pyradios", specifier = ">=2.1.1" },
     { name = "python-mpv", specifier = ">=1.0.7" },
     { name = "streamscrobbler3", specifier = ">=0.0.4" },
     { name = "textual", specifier = ">=3.1.0" },
