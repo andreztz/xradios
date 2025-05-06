@@ -60,19 +60,39 @@ Press `?` to see a complete list of shortcuts and commands.
 
 ## Development Setup 💻
 
-1. Clone the repository:
+1. Clone the repository and navigate into project directory:
 
 ```bash
 git clone git@github.com:andreztz/xradios.git
 cd xradios
 ```
 
-2. Install in editable mode with development dependencies:
+2. Install development dependencies using the following command:
+
 ```bash
-pip install -e .
+uv sync --dev
 ```
 
-3. Run tests:
+3. Start the xradios server by running:
+
+```
+xradiosd
+```
+
+4. Open a new terminal, and run textual console to monitor log messsages:
+
+```
+textual console
+```
+
+5. In another terminal run xradios application in development mode:
+
+```
+textual run --dev xradios
+```
+
+6. Run tests:
+
 ```bash
 pytest
 ```
