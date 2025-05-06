@@ -28,7 +28,7 @@ dev = [
 
 [project.scripts]
 xradios = "xradios:main"
-xradiosd = "xradiosd:main"
+xradiosd = "xradiosd.server:main"
 
 [tool.ruff]
 line-length = 79

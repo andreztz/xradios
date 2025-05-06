@@ -36,4 +36,4 @@ handler = RotatingFileHandler(
 logging.getLogger("xradiosd").addHandler(handler)
 logging.getLogger("xradios").addHandler(handler)
 
-from xradiosd.server import main
+# from xradiosd.server import main
