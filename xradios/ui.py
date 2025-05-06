@@ -235,7 +235,7 @@ class MainScreen(Screen):
         ("ctrl+up", "move_focus_up", "Up"),
         ("ctrl+down", "move_focus_down", "Down"),
     ]
-    top_view: TopView  # TODO: rename top_view, metada_view
+    top_view: TopView
     list_view: ListView
     cmd_line_widget: CommandLine
 
@@ -272,11 +272,9 @@ class MainScreen(Screen):
         self.cmd_line_widget.focus()
 
     def on_descendant_focus(self, widget: Widget):
-        """
-        Remove CommandLine widget.
-        """
-        # WARNING: necessário para remover o CommandLine ao mudar o
-        # foco apontando para a List View usando o ponteiro do mouse.
+        # WARNING: This is necessary so that when the focus is changed to
+        # the 'list_view' widget using the mouse pointer, the 'command_line'
+        # widget is correctly removed from the window.
         if self.list_view.has_focus:
             self.query(CommandLine).remove()
 
