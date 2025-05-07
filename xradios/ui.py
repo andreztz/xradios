@@ -257,7 +257,7 @@ class MainScreen(Screen):
             key="colon",
             action="open_command_mode",
             description="Open Command Line",
-            key_display="ESC + :",
+            key_display=":",
         ),
         Binding("?", "app.push_screen('help')", "Help", key_display="?"),
         ("ctrl+up", "move_focus_up", "Up"),
