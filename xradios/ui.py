@@ -69,7 +69,7 @@ class TopView(Static):
                     self.metadata = response
             except ConnectionRefusedError as exc:
                 self.log(exc)
-            except TypeError as exc:
+            except Exception as exc:
                 self.log(exc)
 
     def watch_metadata(self, value):
