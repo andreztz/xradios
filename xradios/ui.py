@@ -101,6 +101,21 @@ class ListViewUpdateMessage(Message, bubble=True):
 
 
 class ListView(DataTable):
+    BINDINGS = [
+        Binding(
+            key="p",
+            action="play",
+            description="Play",
+            priority=False,
+            key_display="p",
+        ),
+        Binding(
+            key="s",
+            action="stop",
+            description="Stop",
+            priority=False,
+        ),
+    ]
     selected_row_key = reactive(default="")
     buffer = {}
 
@@ -108,6 +123,7 @@ class ListView(DataTable):
         super().__init__(*args, **kwargs)
         self.cursor_type = "row"
         self.styles.height = "1fr"
+        self.selected_station = None
 
     def on_mount(self):
         response = {}
@@ -143,13 +159,38 @@ class ListView(DataTable):
 
     def on_data_table_row_highlighted(self, event):
         self.selected_row_key = event.row_key
+        if self.buffer:
+            self.selected_station: dict = self.buffer[self.selected_row_key]
+
+    def action_stop(self):
+        proxy.stop()
+
+    def action_play(self):
+        proxy.play(**self.selected_station)
 
     def on_key(self, event):
+        station: dict = self.selected_station
+
         if event.key == "enter" and self.has_focus:
             try:
-                proxy.play(**self.buffer.get(self.selected_row_key))
+                proxy.play(**station)
             except Exception as exc:
                 self.log(exc)
+        elif event.key == "a" and self.has_focus:
+            proxy.add_bookmark(**station)
+            self.log("Add to bookmarks")
+        elif event.key == "d" and self.has_focus:
+            proxy.remove_bookmark(**station)
+            self.log("Remove from bookmarks")
+        elif event.key == "b" and self.has_focus:
+            response = {}
+            try:
+                response = proxy.bookmarks()
+            except Exception as exc:
+                self.log(exc)
+                self.log("The server may be down")
+            else:
+                self.post_message(ListViewUpdateMessage(content=response))
 
 
 class CloseCommandLineMessage(Message, bubble=True):
