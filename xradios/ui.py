@@ -14,7 +14,7 @@ from textual.widgets import (
     DataTable,
     Footer,
     Input,
-    Markdown,
+    MarkdownViewer,
     Placeholder,
     Static,
     TabbedContent,
@@ -386,10 +386,12 @@ class MainScreen(Screen):
 
 
 class Help(Screen):
-    BINDINGS = [("escape,space,q,question_mark", "app.pop_screen", "Close")]
+    BINDINGS = [
+        ("escape,space,q,question_mark", "app.pop_screen", "Close"),
+    ]
 
     def compose(self) -> ComposeResult:
-        yield Markdown(Path(__file__).with_suffix(".md").read_text())
+        yield MarkdownViewer(Path(__file__).with_suffix(".md").read_text())
 
 
 class UI(App):
