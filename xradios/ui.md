@@ -1,45 +1,70 @@
-# Help
+# Introduction
 
-To close this window press `ESC`.
+This documentation explains how to use the application, including keyboard shortcuts and commands. The application allows you to browse, play, and manage radio stations, with features like bookmarks (a list of favorite stations) and a command line for advanced controls.
+
+# Help Window
+
+The help window displays a list of keyboard shortcuts and commands. To close the help window, press `Esc`.
 
 ---
 
-# Bindings
+# Keyboard Shortcuts
 
-## Globals: 
+This section lists the keyboard shortcuts for navigating and controlling the application.
 
-- Press `Ctrl + Up` or `Ctrl + Down` to move the focus.
-- To close this app press `Ctrl + q`.
+## Global Shortcuts
 
-## Command Line:
+| Shortcut         | Description                              |
+|------------------|------------------------------------------|
+| `Ctrl + Up`      | Navigate to the previous item            |
+| `Ctrl + Down`    | Navigate to the next item                |
+| `Ctrl + q`       | Close the application                    |
 
-- Press `:` to show the command line.
-- Press `Esc` to close the command line.
+## Command Line
 
-## List View:
+| Shortcut         | Description                              |
+|------------------|------------------------------------------|
+| `:`              | Open the command line                    |
+| `Esc`            | Close the command line                   |
 
-- Press `UP` or `Down` to navigate between list items
-- Press `Enter` to play selected station
+## List View
+
+| Shortcut         | Description                              |
+|------------------|------------------------------------------|
+| `Up`             | Navigate to the previous station         |
+| `Down`           | Navigate to the next station             |
+| `p` or `Enter`   | Play the selected station                |
+| `a`              | Add the selected station to bookmarks    |
+| `d`              | Remove the selected station from bookmarks |
+| `b`              | View the list of bookmarked stations     |
 
 ---
 
 # Commands
 
-## Bookmarks:
+Use these commands in the command line (accessed by pressing `:`).
 
-`bookmarks save=<line-number>`
+## Bookmark Commands
 
-`bookmarks remove=<line-number>`
+- `bookmarks save=<line-number>`: Saves the station at the specified `<line-number>` to bookmarks. For example, `bookmarks save=3` saves the third station in the list.
+- `bookmarks remove=<line-number>`: Removes the station at the specified `<line-number>` from bookmarks. For example, `bookmarks remove=3`.
+- `bookmarks`: Displays the list of bookmarked stations.
 
-`bookmarks`
+## Search Command
 
-## Search command:
+Use the `search` command to find stations based on specific criteria. The format is:
 
-`search option=value1, option="value 2", ....`
+`search option=value1, option="value2", ...`
 
-**Example:**
+**Options**:
+- `order`: Sort results (e.g., `votes` for popularity).
+- `limit`: Maximum number of results (e.g., `1000`).
+- `hide_broken`: Set to `true` to hide stations that are not working.
+- `tag_list`: A list of tags or categories, separated by commas (e.g., `"rock,jazz,pop"`).
 
-`search order=votes, limit=1000, hidebroken=true, tag_list='tag1,tag2,tag3'`
+**Example**:
+
+`search order=votes, limit=1000, hide_broken=true, tag_list="rock,jazz"`
 
 
 | Name              | Value               | Default           | Description                                                                                                                          |
