@@ -110,14 +110,20 @@ class ListView(DataTable):
         self.styles.height = "1fr"
 
     def on_mount(self):
-        response = proxy.bookmarks()
-        self.post_message(ListViewUpdateMessage(content=response))
+        response = {}
+
+        try:
+            response = proxy.bookmarks()
+        except Exception as exc:
+            self.log(exc)
+            self.log("The server may be down")
+        else:
+            self.post_message(ListViewUpdateMessage(content=response))
 
     def fill(self, response):
         headers = ["name", "tags"]
         self.buffer.clear()
         self.clear()
-        # É necessário tratar chaves duplicadas?
         try:
             self.add_columns(*headers)
         except DuplicateKey:
