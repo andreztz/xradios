@@ -1,6 +1,6 @@
 [project]
 name = "xradios"
-version = "0.1.0.dev1"
+version = "0.2.0"
 description = "Search, bookmark, and stream internet radio stations"
 readme = "README.md"
 authors = [
