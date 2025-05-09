@@ -10,6 +10,7 @@ from pyradios import RadioBrowser
 from tinydb import Query, TinyDB
 
 from xradiosd import xradios_data_dir
+from xradiosd.__about__ import __version__
 from xradiosd.metadata import metadata_manager
 from xradiosd.player import player
 
@@ -17,16 +18,17 @@ log = logging.getLogger("xradiosd")
 effective_log_level = logging.getLevelName(log.getEffectiveLevel())
 log.info(f"Log level {effective_log_level=}")
 
-
 rb = RadioBrowser()
+rb.headers.update(
+    {"User-Agent": f"xradios/{__version__} {rb.headers.get('User-Agent', '')}"}
+)
 db = TinyDB(xradios_data_dir / "bookmarks.json")
-
-
 command_handlers = {}
 
 
 def cmd(name):
     """Decorator to register JSON-RPC methods."""
+
     def decorator(func):
         command_handlers[name] = func
 
