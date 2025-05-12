@@ -15,15 +15,12 @@ from textual.widgets import (
     Footer,
     Input,
     MarkdownViewer,
-    Placeholder,
     Static,
     TabbedContent,
     TabPane,
 )
 from textual.widgets.data_table import DuplicateKey
 from textual.worker import Worker, get_current_worker
-
-from xradios.client import proxy
 
 COMMAND_LIST = [
     ":search",
@@ -52,8 +49,9 @@ class TopView(Static):
     selected_row_index = reactive(default="0")
     metadata = reactive(default={})
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, client, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+        self.client = client
         self.core = self.set_interval(10.0, callback=self.request, pause=False)
 
     def render(self):
@@ -64,7 +62,7 @@ class TopView(Static):
         worker = get_current_worker()
         if not worker.is_cancelled:
             try:
-                response = proxy.now_playing()
+                response = self.client.now_playing()
                 if response:
                     self.metadata = response
             except ConnectionRefusedError as exc:
@@ -119,8 +117,9 @@ class ListView(DataTable):
     selected_row_key = reactive(default="")
     buffer = {}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, client, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.client = client
         self.cursor_type = "row"
         self.styles.height = "1fr"
         self.selected_station = None
@@ -129,7 +128,7 @@ class ListView(DataTable):
         response = {}
 
         try:
-            response = proxy.bookmarks()
+            response = self.client.bookmarks()
         except Exception as exc:
             self.log(exc)
             self.log("The server may be down")
@@ -163,29 +162,29 @@ class ListView(DataTable):
             self.selected_station: dict = self.buffer[self.selected_row_key]
 
     def action_stop(self):
-        proxy.stop()
+        self.client.stop()
 
     def action_play(self):
-        proxy.play(**self.selected_station)
+        self.client.play(**self.selected_station)
 
     def on_key(self, event):
         station: dict = self.selected_station
 
         if event.key == "enter" and self.has_focus:
             try:
-                proxy.play(**station)
+                self.client.play(**station)
             except Exception as exc:
                 self.log(exc)
         elif event.key == "a" and self.has_focus:
-            proxy.add_bookmark(**station)
+            self.client.add_bookmark(**station)
             self.log("Add to bookmarks")
         elif event.key == "d" and self.has_focus:
-            proxy.remove_bookmark(**station)
+            self.client.remove_bookmark(**station)
             self.log("Remove from bookmarks")
         elif event.key == "b" and self.has_focus:
             response = {}
             try:
-                response = proxy.bookmarks()
+                response = self.client.bookmarks()
             except Exception as exc:
                 self.log(exc)
                 self.log("The server may be down")
@@ -314,13 +313,17 @@ class MainScreen(Screen):
     list_view: ListView
     cmd_line_widget: CommandLine
 
+    def __init__(self, client, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.client = client
+
     def compose(self) -> ComposeResult:
-        yield TopView(name="TopView", id="top_view")
+        yield TopView(self.client, name="TopView", id="top_view")
         with TabbedContent(initial="stations", classes="tab_content"):
             with TabPane("Stations", id="stations", classes="tab_pane"):
-                yield ListView(name="list_view", classes="list_view")
-            with TabPane("Bookmarks", id="bookmarks"):
-                yield Placeholder(name="bookmarks")
+                yield ListView(self.client, name="list_view", classes="list_view")
+            # with TabPane("Bookmarks", id="bookmarks"):
+            #     yield Placeholder(name="bookmarks")
         yield Footer()
 
     def on_mount(self):
@@ -376,9 +379,9 @@ class MainScreen(Screen):
 
     @work(exclusive=True, thread=True)
     def http_handler(self, command, **kwargs):
-        client = getattr(proxy, command)
+        # client = getattr(self.client, command)
         worker = get_current_worker()
-        client = getattr(proxy, command)
+        client = getattr(self.client, command)
         if not worker.is_cancelled:
             response = client(**kwargs)
             self.log(response)
@@ -397,5 +400,9 @@ class Help(Screen):
 class UI(App):
     SCREENS = {"help": Help}
 
+    def __init__(self, client, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.client = client
+
     def on_mount(self):
-        self.push_screen(MainScreen())
+        self.push_screen(MainScreen(self.client))
