@@ -35,17 +35,43 @@ pip install --user xradios
 
 ## Usage 🚀
 
-Start the server:
+You can run **xradios** in two modes:
+
+### 1. Run the client and Server together (Local Mode)
+
+If you want to launch the interactive interface and automatically start the server (if not already running), just run:
+
+```bash
+xradios
+```
+By default, it connects to `127.0.0.1:10000`. You can override this by specifying the address and port:
+
+`xradios --host 192.168.0.10 --port 9000`
+
+If the host is local (`127.0.0.1` or `0.0.0.0`), xradios will try to start the server automatically.
+
+### 2. Run the Server and Client Separately (Advanced / Remote Mode)
+
+You can manually start the server and then connect to it using the client.
 
 ```bash
 xradiosd
 ```
 
-Launch the interactive interface:
+Or with custom host and port:
+
+```bash
+xradiosd --host 0.0.0.0 --port 9000
 
 ```
-xradios
+
+Then, start the client and connect to the server:
+
+```bash
+xradios --host 192.168.0.10 --port 9000
+
 ```
+
 
 ### Commands
 
