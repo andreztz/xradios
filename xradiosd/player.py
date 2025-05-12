@@ -58,7 +58,7 @@ class MPVPlayer(PlayerBase):
         self.state = True
 
     def stop(self):
-        self.player.play("")
+        self.player.stop()
         self.state = False
 
     def pause(self):
