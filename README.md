@@ -97,6 +97,7 @@ cd xradios
 
 ```bash
 uv sync --dev
+uv pip install -e .
 ```
 
 3. Start the xradios server by running:
