@@ -35,6 +35,11 @@ def cmd(name):
     return decorator
 
 
+@cmd("ping")
+def ping():
+    return "pong"
+
+
 @cmd("play")
 def play(**station):
     """Starts playback of a radio station."""
