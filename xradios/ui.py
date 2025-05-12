@@ -42,11 +42,11 @@ class TopView(Static):
     TopView {
         dock: top;
         border: heavy green;
+        padding: 0 2;
+        background: $panel;
     }
     """
-
     text = reactive(default="")
-    selected_row_index = reactive(default="0")
     metadata = reactive(default={})
 
     def __init__(self, client, *args, **kwargs) -> None:
@@ -80,7 +80,7 @@ class TopView(Static):
             name = value.get("name", "No name")
             song = value.get("song", "No song")
             home_page = value.get("homepage", "No web page")
-            self.text = f"{name}    | Playing: {song} | Web Page: {home_page}"
+            self.text = f"{name}\nPlaying: {song}\nWeb Page: {home_page}"
 
     def init(self):
         self.request()
@@ -321,7 +321,9 @@ class MainScreen(Screen):
         yield TopView(self.client, name="TopView", id="top_view")
         with TabbedContent(initial="stations", classes="tab_content"):
             with TabPane("Stations", id="stations", classes="tab_pane"):
-                yield ListView(self.client, name="list_view", classes="list_view")
+                yield ListView(
+                    self.client, name="list_view", classes="list_view"
+                )
             # with TabPane("Bookmarks", id="bookmarks"):
             #     yield Placeholder(name="bookmarks")
         yield Footer()
