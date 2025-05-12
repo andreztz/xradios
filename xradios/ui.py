@@ -381,7 +381,6 @@ class MainScreen(Screen):
 
     @work(exclusive=True, thread=True)
     def http_handler(self, command, **kwargs):
-        # client = getattr(self.client, command)
         worker = get_current_worker()
         client = getattr(self.client, command)
         if not worker.is_cancelled:
